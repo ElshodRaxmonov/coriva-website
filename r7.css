@@ -1,0 +1,242 @@
+/* Round 7 · Scenes. The reference video's five scenes with Coriva's approved content and tokens.
+   Layout concept: cinematic hero -> a sheet slides over it -> statement + two cards -> one pinned photograph that
+   carries a glass card, then splits -> bold Ocean Teal scene with demo widgets -> calm closing sections.
+   Motion: CSS only. One-off entrance on load; everything else is scroll-linked (scroll-driven animations).
+   Pinned and scroll-linked scenes run only from 1100 x 760 px with motion allowed and timeline support;
+   everything else gets a stacked page where all content is visible. */
+:root {
+  --ink: #192B3A; --navy: #0F1F2E; --coral: #F36F56; --coral-deep: #B84630; --teal: #0F766E; --bteal: #14B8A6;
+  --alab: #FAF8F5; --muted: #5B6A7F; --line: #E8E6E1;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --spring: linear(0, 0.009, 0.035 2.1%, 0.141, 0.281 6.7%, 0.723 12.9%, 0.938 16.7%, 1.017 20.3%, 1.041 24%, 1.035 28.3%, 1.007 38.9%, 0.998 51%, 1);
+  --glass-d: rgba(15, 31, 46, 0.5);
+  --edge-d: inset 0 1px 0 rgba(255, 255, 255, 0.28), inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+html { background: var(--alab); }
+.r7 { display: block; }
+.glass-d { background: var(--glass-d); -webkit-backdrop-filter: blur(24px) saturate(160%); backdrop-filter: blur(24px) saturate(160%); box-shadow: var(--edge-d), 0 30px 60px -30px rgba(0, 0, 0, 0.55); }
+
+/* ---------- Header: transparent over the hero, a floating glass capsule once scrolled ---------- */
+.hdr { position: fixed !important; top: 0; left: 0; right: 0; z-index: 50; border-bottom: 0 !important; transition: background-color 300ms ease, box-shadow 300ms ease, top 300ms var(--ease-out), border-radius 300ms ease; }
+.hdr.is-scrolled { top: 10px; left: 12px; right: 12px; margin: 0 auto; max-width: 1256px; border-radius: 999px; background: rgba(15, 31, 46, 0.72); -webkit-backdrop-filter: blur(20px) saturate(160%); backdrop-filter: blur(20px) saturate(160%); box-shadow: var(--edge-d), 0 10px 24px -20px rgba(15, 31, 46, 0.4); }
+.hdr.is-scrolled .hdr-row { min-height: 60px; padding-inline: 8px 8px; }
+@media (min-width: 1100px) { .hdr .nav-inline { margin-inline: auto; } }
+
+/* ---------- Scene 1 · Hero ---------- */
+.s1 { position: relative; min-height: max(100svh, 640px); display: grid; place-items: center; overflow: hidden; color: #FFFFFF; background: var(--navy); isolation: isolate; }
+.s1-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%; z-index: -2; }
+.s1-shade { position: absolute; inset: 0; z-index: -1; background: radial-gradient(80% 70% at 50% 46%, rgba(15, 31, 46, 0.62), rgba(15, 31, 46, 0.30) 70%), linear-gradient(180deg, rgba(15, 31, 46, 0.55), rgba(15, 31, 46, 0.15) 30%, rgba(15, 31, 46, 0.35) 70%, rgba(15, 31, 46, 0.85)); }
+.s1-inner { text-align: center; padding-block: 140px 160px; display: flex; flex-direction: column; align-items: center; }
+.s1-title { margin: 0; font-family: Sora,"Sora Fallback", Inter,"Inter Fallback", sans-serif; font-weight: 300; font-size: clamp(40px, 7.6vw, 116px); line-height: 1.02; letter-spacing: -0.045em; max-width: 9.19em; text-wrap: balance; }
+.s1-title .w { display: inline-block; }
+.s1-mark { display: inline-grid; place-items: center; width: 0.92em; height: 0.78em; border-radius: 0.22em; vertical-align: -0.06em; background: rgba(255, 255, 255, 0.16); -webkit-backdrop-filter: blur(14px) saturate(160%); backdrop-filter: blur(14px) saturate(160%); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 0 0 1px rgba(255, 255, 255, 0.2); }
+.s1-mark img { width: 64%; height: auto; }
+.s1-intro { margin: 28px 0 0; max-width: 29.03em; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.55; color: #FAF8F5; text-wrap: pretty; }
+.s1-actions { margin-top: 32px; display: flex; gap: 12px; justify-content: center; }
+.s1-card { position: absolute; right: max(24px, env(safe-area-inset-right, 0px)); bottom: 28px; width: 300px; display: grid; grid-template-columns: 64px 1fr; gap: 6px 14px; align-items: center; padding: 12px; border-radius: 24px; color: #FAF8F5; }
+.s1-card-img { grid-row: span 2; width: 64px; height: 64px; object-fit: cover; border-radius: 16px; }
+.s1-card-text { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 500; }
+.s1-card-text .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--bteal); }
+.s1-card-btn { justify-self: start; display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 999px; color: #FFFFFF; font-weight: 600; font-size: 15px; text-decoration: none; background: rgba(255, 255, 255, 0.14); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3); }
+.s1-card-btn:focus-visible { outline: 3px solid #FAF8F5; outline-offset: 3px; }
+@media (max-width: 760px) {
+  .s1-card { position: relative; right: auto; bottom: auto; margin: -120px auto 32px; width: min(320px, calc(100% - 32px)); }
+  .s1 { display: block; } .s1-inner { padding-block: 120px 140px; }
+}
+
+/* On load: the photo settles once, the headline rises word by word, then intro, action, card */
+@media (prefers-reduced-motion: no-preference) {
+  .s1-photo { animation: r7-settle 2400ms var(--ease-out) both; }
+  .s1-title .w { overflow: clip; overflow-clip-margin: 0.14em; vertical-align: top; padding-bottom: 0.08em; }
+  .s1-title .w > span { display: inline-block; animation: r7-word 1000ms var(--spring) both; animation-delay: calc(120ms + var(--i) * 70ms); }
+  .s1-mark { animation: r7-pop 700ms var(--spring) 260ms both; }
+  .s1-intro { animation: r7-rise 700ms var(--ease-out) 520ms both; }
+  .s1-actions { animation: r7-rise 700ms var(--ease-out) 620ms both; }
+  .s1-card { animation: r7-card 900ms var(--spring) 900ms both; }
+}
+@keyframes r7-settle { from { transform: scale(1.06); opacity: 0.6; } }
+@keyframes r7-word { from { transform: translateY(110%); } }
+@keyframes r7-pop { from { transform: scale(0.6) rotate(-8deg); opacity: 0; } }
+@keyframes r7-rise { from { transform: translateY(14px); opacity: 0; } }
+@keyframes r7-card { from { transform: translateY(24px) scale(0.96); opacity: 0; } }
+
+/* ---------- The sheet slides over the hero ---------- */
+.sheet { position: relative; z-index: 2; background: var(--alab); border-radius: 40px 40px 0 0; margin-top: -40px; box-shadow: 0 -24px 50px -30px rgba(15, 31, 46, 0.4); }
+
+/* ---------- Scene 2 · Statement and two cards ---------- */
+.s2 { padding-block: clamp(80px, 11vw, 160px) clamp(64px, 8vw, 120px); }
+.s2-head { text-align: center; display: flex; flex-direction: column; align-items: center; }
+.s2-title { margin: 0; font-family: Sora,"Sora Fallback", Inter,"Inter Fallback", sans-serif; font-weight: 300; font-size: clamp(40px, 7.4vw, 108px); line-height: 1.02; letter-spacing: -0.045em; color: var(--teal); }
+.s2-title .w { display: inline-block; }
+.s2-head .muted { margin: 24px auto 0 !important; text-align: center; }
+.s2-cards { margin-top: clamp(40px, 6vw, 72px); display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 8fr); gap: 20px; }
+.s2-card { position: relative; border-radius: 36px; overflow: hidden; min-height: 520px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 30px 60px -36px rgba(15, 31, 46, 0.55); }
+.s2-left { color: #FFFFFF; display: flex; align-items: flex-end; isolation: isolate; }
+.s2-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+.s2-left::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(15, 31, 46, 0.15), rgba(15, 31, 46, 0.55) 45%, rgba(15, 31, 46, 0.92)); }
+.s2-left-in { width: 100%; padding: 28px; display: flex; flex-direction: column; gap: 12px; }
+.s2-left-in > span { color: #FAF8F5 !important; min-height: 0 !important; font-family: Sora,"Sora Fallback", Inter,"Inter Fallback", sans-serif; font-size: 28px !important; font-weight: 300; letter-spacing: -0.02em; }
+.s2-left .role-tabs { display: flex !important; flex-direction: column; gap: 8px; max-width: none !important; }
+.s2-left .role-tab { justify-content: flex-start !important; text-align: left !important; min-height: 52px; padding: 0 20px !important; background: rgba(255, 255, 255, 0.14) !important; color: #FFFFFF !important; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28) !important; -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); font-size: 17px; transition: background-color 200ms ease, color 200ms ease, transform 160ms var(--ease-out) !important; }
+.s2-left .role-tab[aria-selected="true"] { background: #FAF8F5 !important; color: var(--ink) !important; }
+.s2-left .role-tab:focus-visible { outline: 3px solid #FAF8F5 !important; }
+.s2-right { background: radial-gradient(80% 70% at 100% 0%, rgba(20, 184, 166, 0.35), transparent 60%), radial-gradient(70% 60% at 0% 100%, rgba(243, 111, 86, 0.22), transparent 60%), linear-gradient(160deg, #1B3A48, var(--navy)); color: #FAF8F5; padding: 28px 0 28px 28px; }
+.s2-right .lens-panel { margin: 0 !important; animation: none; }
+.s2-right .lens-panel:focus-visible { outline: 3px solid #FAF8F5 !important; outline-offset: -6px; }
+.s2-right .lens-answer { margin: 0 0 20px !important; color: #FAF8F5 !important; font-family: Sora,"Sora Fallback", Inter,"Inter Fallback", sans-serif; font-weight: 300 !important; font-size: clamp(26px, 2.6vw, 38px) !important; }
+.s2-right .day { display: grid !important; grid-auto-flow: column; grid-auto-columns: 236px; grid-template-columns: none !important; gap: 14px; margin: 0 !important; padding: 0 28px 8px 0; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-left: 0; scrollbar-width: thin; }
+.s2-right .day::before { display: none; }
+.s2-right .moment { scroll-snap-align: start; margin: 0 !important; padding: 52px 18px 18px !important; border-radius: 24px; background: #FFFFFF; color: var(--ink); animation: none !important; }
+.s2-right .moment::before { left: 18px !important; top: 20px !important; }
+.s2-right .moment.key::before { left: 15px !important; top: 17px !important; }
+.s2-right .moment p { color: var(--muted); }
+
+/* ---------- Scenes 3 and 4 · One photograph, pinned, then split ---------- */
+.s34 { position: relative; }
+.s34-stage { position: relative; }
+.s34-photo { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; max-height: 92svh; object-fit: cover; object-position: 50% 40%; }
+.s3-card { position: relative; z-index: 2; margin: -120px auto 0; width: min(880px, calc(100% - 32px)); border-radius: 32px; padding: 20px; display: grid; grid-template-columns: 112px minmax(0, 1fr) auto; gap: 20px; align-items: center; color: #FAF8F5; }
+.s3-thumb { width: 112px; height: 112px; object-fit: cover; border-radius: 20px; }
+.s3-text h2 { margin: 0 0 8px !important; font-family: Sora,"Sora Fallback", Inter,"Inter Fallback", sans-serif; font-weight: 400 !important; font-size: clamp(24px, 2.4vw, 34px) !important; letter-spacing: -0.03em; max-width: none !important; color: #FFFFFF; }
+.s3-text p { margin: 0 !important; font-size: 17px !important; color: rgba(250, 248, 245, 0.88) !important; max-width: 32.81em !important; }
+.s3-actions { display: flex; flex-direction: column; gap: 10px; }
+.s3-actions .btn { min-height: 48px; font-size: 16px; padding: 0 22px; }
+.s4-left { position: relative; padding: clamp(56px, 8vw, 112px) max(20px, env(safe-area-inset-left, 0px)) clamp(56px, 8vw, 112px); }
+.s4-text { max-width: 640px; margin: 0 auto; }
+.s4-text h2 { color: var(--ink) !important; font-family: Sora,"Sora Fallback", Inter,"Inter Fallback", sans-serif; font-weight: 400 !important; font-size: clamp(30px, 3.4vw, 48px) !important; letter-spacing: -0.035em !important; }
+.s4-text > p { color: var(--muted) !important; }
+.s4-text ul { margin: 20px 0 28px !important; }
+.s4-text li { color: var(--ink) !important; border-color: var(--line) !important; font-family: Sora,"Sora Fallback", Inter,"Inter Fallback", sans-serif; font-weight: 400 !important; font-size: clamp(22px, 2.2vw, 30px) !important; letter-spacing: -0.02em !important; }
+.s4-text li:last-child { color: var(--coral-deep) !important; }
+.s4-tile { display: none; }
+.s4-note { margin: 24px auto 64px; width: min(560px, calc(100% - 32px)); display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 20px; font-weight: 500; color: #FAF8F5; }
+.s4-note img { width: 36px; height: auto; flex: none; }
+@media (max-width: 760px) {
+  .s3-card { grid-template-columns: 1fr; margin-top: -80px; }
+  .s3-thumb { display: none; }
+  .s3-actions { flex-direction: row; flex-wrap: wrap; }
+}
+
+/* ---------- Scene 5 · Bold Ocean Teal scene with demo widgets ---------- */
+.s5 { background: radial-gradient(60% 70% at 85% 10%, rgba(20, 184, 166, 0.45), transparent 60%), radial-gradient(50% 60% at 5% 95%, rgba(25, 43, 58, 0.55), transparent 60%), var(--teal); color: #FFFFFF; padding-block: clamp(80px, 10vw, 150px); overflow: clip; }
+.s5-in { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; }
+.s5-head { text-align: center; }
+.s5-head h2 { margin: 0 !important; font-family: Sora,"Sora Fallback", Inter,"Inter Fallback", sans-serif; font-weight: 300 !important; font-size: clamp(40px, 6vw, 92px) !important; letter-spacing: -0.045em !important; line-height: 1.02; color: #FFFFFF; }
+.s5-status > div { gap: 16px !important; }
+.s5-status > div > div { background: #FFFFFF !important; color: var(--ink); border-radius: 28px !important; box-shadow: 0 30px 60px -30px rgba(10, 30, 35, 0.6) !important; }
+.s5-widgets { display: none; }
+.s5-w { position: absolute; width: 230px; padding: 10px; border-radius: 22px; background: rgba(255, 255, 255, 0.16); -webkit-backdrop-filter: blur(16px) saturate(150%); backdrop-filter: blur(16px) saturate(150%); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.18), 0 24px 48px -24px rgba(5, 30, 35, 0.6); }
+.s5-w .mini, .s5-w .mini-photo { margin: 0 !important; }
+.s5-w .demo { position: absolute; top: -10px; right: 14px; padding: 3px 10px; border-radius: 999px; background: #FAF8F5; color: var(--ink); font-size: 12px; font-weight: 600; letter-spacing: 0.02em; }
+@media (min-width: 1100px) {
+  /* Widgets sit in side columns around the headline, never over it */
+  .s5-in { grid-template-columns: 240px minmax(0, 1fr) 240px; grid-template-rows: auto auto auto; column-gap: 32px; row-gap: 28px; align-items: center; }
+  .s5-widgets { display: contents; }
+  .s5-head { grid-column: 2; grid-row: 1 / span 2; padding: 0; }
+  .s5-w { position: relative; width: auto; }
+  .s5-w.w0 { grid-column: 1; grid-row: 1; transform: rotate(-3deg) translateX(-8px); }
+  .s5-w.w1 { grid-column: 3; grid-row: 1; transform: rotate(2.5deg) translateX(10px); }
+  .s5-w.w2 { grid-column: 1; grid-row: 2; transform: rotate(2deg) translateX(28px); }
+  .s5-w.w3 { grid-column: 3; grid-row: 2; transform: rotate(-2deg) translateX(-20px); }
+  .s5-status { grid-column: 1 / -1; grid-row: 3; margin-top: 24px; }
+}
+
+/* ---------- Calm closing sections ---------- */
+.calm section[aria-labelledby="partners-i3"] { background: #FFFFFF !important; }
+.calm #join > div { background: radial-gradient(70% 90% at 90% 10%, rgba(20, 184, 166, 0.22), transparent 60%), radial-gradient(60% 80% at 0% 100%, rgba(243, 111, 86, 0.24), transparent 60%), var(--ink) !important; }
+.calm #join p span { background: rgba(15, 31, 46, 0.5) !important; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16); }
+.calm .faq { padding-bottom: 96px; }
+
+/* ================= Wide screens with motion: pinned, scroll-linked scenes ================= */
+@supports (animation-timeline: view()) and (timeline-scope: --x) {
+@media (min-width: 1100px) and (min-height: 760px) and (prefers-reduced-motion: no-preference) {
+  /* Hero stays put; the sheet slides over it. The hero's content drifts up as it is covered. */
+  .s1 { position: sticky; top: 0; z-index: 0; }
+  .s1-inner { animation: r7-hero-out linear both; animation-timeline: scroll(root); animation-range: 0 90vh; }
+  .s1-card { animation: r7-card 900ms var(--spring) 900ms both; }
+
+  /* Scene 2: the headline fills word by word; the cards fly in from the lower left and separate */
+  .s2-title { view-timeline: --s2t block; }
+  .s2-title .w > span { animation: r7-fill linear both; animation-timeline: --s2t; animation-range: entry calc(20% + var(--i) * 12%) cover calc(30% + var(--i) * 6%); }
+  .s2-cards { view-timeline: --s2c block; }
+  .s2-left { animation: r7-fly-l linear both; animation-timeline: --s2c; animation-range: entry 0% cover 42%; }
+  .s2-right { animation: r7-fly-r linear both; animation-timeline: --s2c; animation-range: entry 10% cover 48%; }
+
+  /* Scenes 3-4: one stage pinned for 220 vh of scroll */
+  .s34 { height: 320vh; view-timeline: --s34 block; }
+  .s34-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+  .s34-photo { position: absolute; inset: 0; width: 100%; height: 100%; max-height: none; aspect-ratio: auto; object-position: 52% 34%; animation: r7-photo linear both; animation-timeline: --s34; animation-range: contain 0% contain 100%; }
+  .s3-card { position: absolute; left: 50%; top: 50%; margin: 0; width: min(880px, calc(100% - 96px)); translate: -50% -50%; animation: r7-why linear both; animation-timeline: --s34; animation-range: contain 0% contain 100%; }
+  .s4-left { position: absolute; inset: 0 50% 0 0; display: grid; align-items: center; padding: 96px 56px 56px clamp(40px, 5vw, 96px); background: var(--alab); animation: r7-left linear both; animation-timeline: --s34; animation-range: contain 0% contain 100%; }
+  .s4-text { margin: 0; max-width: 520px; position: relative; z-index: 1; }
+  .s4-text h2 { font-size: clamp(30px, 2.8vw, 42px) !important; }
+  .s4-text li { font-size: clamp(20px, 1.8vw, 26px) !important; padding-block: 8px !important; }
+  .s4-tile { display: block; position: absolute; z-index: 0; width: 64px; height: 64px; border-radius: 18px; overflow: hidden; box-shadow: 0 16px 30px -14px rgba(15, 31, 46, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.6); animation: r7-tile linear both; animation-timeline: --s34; animation-range: contain 0% contain 100%; }
+  .s4-tile img { width: 100%; height: 100%; object-fit: cover; }
+  .s4-tile.t0 { left: 6%; top: 12%; --dy: 60px; }
+  .s4-tile.t1 { right: 8%; top: 9%; width: 76px; height: 76px; --dy: 110px; }
+  .s4-tile.t2 { right: 5%; top: 46%; --dy: 40px; }
+  .s4-tile.t3 { left: 3%; top: 62%; width: 54px; height: 54px; --dy: 90px; }
+  .s4-tile.t4 { right: 14%; bottom: 6%; width: 70px; height: 70px; --dy: 70px; }
+  .s4-note { position: absolute; right: 40px; bottom: 40px; margin: 0; width: 380px; animation: r7-note linear both; animation-timeline: --s34; animation-range: contain 0% contain 100%; }
+  /* Anything focused inside the stage is shown, whatever the scroll position */
+  .s3-card:focus-within, .s4-left:focus-within { animation: none !important; opacity: 1 !important; }
+  .s4-left:focus-within { z-index: 3; }
+
+  /* Scene 5: widgets come into focus one by one */
+  .s5 { view-timeline: --s5 block; }
+  .s5-w { animation: r7-focus linear both; animation-timeline: --s5; }
+  .s5-w.w0 { animation-range: entry 30% cover 38%; } .s5-w.w1 { animation-range: entry 45% cover 42%; }
+  .s5-w.w2 { animation-range: entry 60% cover 46%; } .s5-w.w3 { animation-range: entry 75% cover 50%; }
+  .s5-status > div > div { animation: r7-up linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; }
+
+}
+}
+@keyframes r7-hero-out { to { transform: translateY(-80px) scale(0.97); } }
+@keyframes r7-fill { from { color: #8FBDB8; } to { color: var(--teal); } }
+@keyframes r7-fly-l { from { transform: translate(-6vw, 24vh) rotate(-10deg) scale(0.62); opacity: 0.2; } 30% { opacity: 1; } }
+@keyframes r7-fly-r { from { transform: translate(-48vw, 30vh) rotate(-12deg) scale(0.5); opacity: 0; } 30% { opacity: 1; } }
+@keyframes r7-photo {
+  0% { transform: scale(1.12); clip-path: inset(0 0 0 0 round 0); }
+  16% { transform: scale(1); clip-path: inset(0 0 0 0 round 0); }
+  52% { clip-path: inset(0 0 0 0 round 0); }
+  70%, 100% { transform: scale(1); clip-path: inset(16px 16px 16px 50% round 32px); }
+}
+@keyframes r7-why {
+  0%, 6% { opacity: 0; transform: translateY(70px) scale(0.96); }
+  22%, 42% { opacity: 1; transform: none; }
+  53% { opacity: 0; transform: translateY(-50px) scale(0.98); }
+  54%, 100% { opacity: 0; transform: translateY(-140vh); }
+}
+@keyframes r7-left { 0%, 55% { opacity: 0; transform: translateX(-110%); } 56% { opacity: 0; transform: translateX(-60px); } 74%, 100% { opacity: 1; transform: none; } }
+@keyframes r7-tile { 0%, 58% { opacity: 0; transform: translateY(var(--dy)) scale(0.6); } 76% { opacity: 1; transform: translateY(calc(var(--dy) * 0.4)) scale(1); } 100% { opacity: 1; transform: translateY(calc(var(--dy) * -0.3)); } }
+@keyframes r7-note { 0%, 74% { opacity: 0; transform: translateY(30px); } 88%, 100% { opacity: 1; transform: none; } }
+@keyframes r7-focus { from { opacity: 0; filter: blur(14px); translate: 0 40px; } to { opacity: 1; filter: none; translate: 0 0; } }
+@keyframes r7-up { from { opacity: 0; transform: translateY(36px); } }
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass-d, .hdr.is-scrolled, .s5-w { background: #192B3A !important; backdrop-filter: none !important; }
+  .s1-mark { background: rgba(15, 31, 46, 0.8); backdrop-filter: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hdr { transition: none; }
+}
+
+/* Fixes from the Round 7 checks */
+.s1-card, .s3-card, .s4-note { box-sizing: border-box; }
+.s3-card, .s4-note { background: rgba(15, 31, 46, 0.9); }
+@supports (animation-timeline: view()) and (timeline-scope: --x) {
+  @media (min-width: 1100px) and (min-height: 760px) and (prefers-reduced-motion: no-preference) {
+    .s3-card { background: rgba(15, 31, 46, 0.58); }
+    .s4-note { background: rgba(15, 31, 46, 0.66); }
+  }
+}
+@media (max-width: 899px) {
+  .s2-cards { grid-template-columns: minmax(0, 1fr); }
+  .s2-card { min-height: 0; }
+  .s2-left { display: block; background: var(--navy); }
+  .s2-bg { position: relative; display: block; height: 240px; z-index: 0; object-position: 50% 30%; }
+  .s2-left::after { inset: 0 0 auto 0; height: 240px; z-index: 0; background: linear-gradient(180deg, rgba(15, 31, 46, 0) 35%, var(--navy)); }
+  .s2-left-in { position: relative; z-index: 1; margin-top: -48px; padding: 0 20px 24px; }
+  .s2-right { padding: 24px 0 24px 20px; }
+}

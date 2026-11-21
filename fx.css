@@ -1,0 +1,30 @@
+/* Round 6b shared feature styles, keyed by <html data-fx="..."> (see fx.js). Reduced motion: no travel. */
+:root { --spring: linear(0, 0.009, 0.035 2.1%, 0.141, 0.281 6.7%, 0.723 12.9%, 0.938 16.7%, 1.017 20.3%, 1.041 24%, 1.035 28.3%, 1.007 38.9%, 0.998 51%, 1); }
+
+/* split: the headline rises word by word from a mask (B, liked by the owner) */
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-fx~="split"] .hero-title .w { display: inline-block; overflow: clip; overflow-clip-margin: 0.12em; vertical-align: top; padding-bottom: 0.06em; }
+  :root[data-fx~="split"] .hero-title .w > span { display: inline-block; animation: fx-word 900ms var(--spring) both; animation-delay: calc(80ms + var(--i) * 70ms); }
+  :root[data-fx~="split"].m-on .hero-inner > h1 { animation: none !important; opacity: 1 !important; transform: none !important; }
+}
+@keyframes fx-word { from { transform: translateY(105%); } }
+
+/* lens: the role tabs sit on one glass track; a liquid lens marks the chosen role and slides, stretching, to the next */
+:root[data-fx~="lens"] .role-tabs.has-blob { position: relative; isolation: isolate; padding: 6px; border-radius: 32px; gap: 4px;
+  background: rgba(255, 255, 255, 0.55); -webkit-backdrop-filter: blur(20px) saturate(170%); backdrop-filter: blur(20px) saturate(170%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 0 0 1px rgba(255, 255, 255, 0.6), 0 0 0 1px rgba(25, 43, 58, 0.08), 0 16px 32px -20px rgba(15, 31, 46, 0.35); }
+:root[data-fx~="lens"] .role-tabs.has-blob .role-tab { background: transparent !important; box-shadow: none !important; color: #192B3A; transition: color 220ms ease; }
+:root[data-fx~="lens"] .role-tabs.has-blob .role-tab[aria-selected="true"] { color: #FAF8F5; }
+:root[data-fx~="lens"] .lens-blob { position: absolute; left: 0; top: 0; z-index: -1; border-radius: 999px; pointer-events: none; transform-origin: 50% 50%;
+  background: linear-gradient(180deg, rgba(43, 64, 84, 0.96), rgba(25, 43, 58, 0.98));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.38), inset 0 -2px 6px rgba(0, 0, 0, 0.25), 0 10px 22px -10px rgba(15, 31, 46, 0.7); }
+
+/* sheen: light catches the glass where a fine pointer is */
+:root[data-fx~="sheen"] .lg:not(.s1-card, .s3-card, .s4-note) { position: relative; }
+:root[data-fx~="sheen"] .lg::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity 400ms ease;
+  background: radial-gradient(280px circle at var(--sx, 50%) var(--sy, 0%), rgba(255, 255, 255, 0.45), transparent 60%); mix-blend-mode: soft-light; }
+:root[data-fx~="sheen"] .lg.is-lit::after { opacity: 1; }
+
+@media (prefers-reduced-transparency: reduce) {
+  :root[data-fx~="lens"] .role-tabs.has-blob { background: #FFFFFF; backdrop-filter: none; }
+}

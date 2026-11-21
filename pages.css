@@ -1,0 +1,85 @@
+/* Round 8 · the shared system for the ten other pages (approved markup, restyled). Loaded after motion.css.
+   Structure: a cinematic Navy intro that stays put -> the page rises over it as a sheet -> a sky inside the sheet that
+   moves from morning to evening as you read -> the Navy closing band and footer are the night.
+   Liquid glass on cards; Sora 300 display type; the approved per-page motion (motion.js) is kept. */
+:root {
+  --ink: #192B3A; --navy: #0F1F2E; --teal: #0F766E; --alab: #FAF8F5; --muted: #5B6A7F;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --spring: linear(0, 0.009, 0.035 2.1%, 0.141, 0.281 6.7%, 0.723 12.9%, 0.938 16.7%, 1.017 20.3%, 1.041 24%, 1.035 28.3%, 1.007 38.9%, 0.998 51%, 1);
+  --lg-edge: inset 0 1.5px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(255, 255, 255, 0.45), inset 1.5px 0 0 rgba(255, 255, 255, 0.6), inset 0 0 24px rgba(255, 255, 255, 0.35), 0 0 0 1px rgba(25, 43, 58, 0.07), 0 22px 44px -26px rgba(15, 31, 46, 0.4);
+}
+html { background: var(--navy); }
+.page { background: transparent !important; }
+
+/* Header: a floating liquid-glass capsule once pinned */
+.hdr { border-bottom: 0 !important; z-index: 50; }
+.hdr.hdr-pinned { left: 12px; right: 12px; top: 10px; margin: 0 auto; max-width: 1256px; border-radius: 999px; background: rgba(15, 31, 46, 0.72); -webkit-backdrop-filter: blur(20px) saturate(160%); backdrop-filter: blur(20px) saturate(160%); box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.32), inset 0 0 0 1px rgba(255, 255, 255, 0.12), 0 10px 24px -20px rgba(15, 31, 46, 0.4); transform: translateY(calc(-100% - 16px)); }
+.hdr.hdr-pinned.hdr-show { transform: none; }
+.hdr.hdr-pinned .hdr-row { min-height: 60px; padding-inline: 8px; }
+
+/* Intro: cinematic Navy with the brand glow; light display type; the heart mark as a glass chip */
+:is(.pf-intro, .doc-hero) { position: relative; isolation: isolate; background: radial-gradient(46vmax 36vmax at 88% 0%, rgba(20, 184, 166, 0.36), transparent 70%), radial-gradient(40vmax 32vmax at 0% 100%, rgba(243, 111, 86, 0.22), transparent 70%), radial-gradient(1px 1px at 30% 30%, rgba(250, 248, 245, 0.6), transparent), radial-gradient(1px 1px at 72% 62%, rgba(250, 248, 245, 0.45), transparent), var(--navy) !important; padding-bottom: 152px !important; }
+:is(.pf-intro, .doc-hero) h1 { font-family: Sora,"Sora Fallback", Inter,"Inter Fallback", sans-serif; font-weight: 300 !important; letter-spacing: -0.045em !important; line-height: 1.03 !important; font-size: clamp(38px, 6vw, 88px) !important; text-wrap: balance; }
+.doc-hero h1 { font-size: clamp(36px, 4.6vw, 68px) !important; }
+h1 .w { display: inline-block; }
+.r8-mark { display: inline-grid; place-items: center; width: 0.92em; height: 0.78em; margin-left: 0.18em; border-radius: 0.22em; vertical-align: -0.06em; background: rgba(255, 255, 255, 0.14); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.55), inset 0 0 0 1px rgba(255, 255, 255, 0.2); }
+.r8-mark img { width: 64%; height: auto; }
+.doc-photo img, .doc-hero img { border-radius: 28px !important; box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.3), 0 50px 90px -40px rgba(0, 0, 0, 0.8); }
+@media (prefers-reduced-motion: no-preference) {
+  h1 .w { overflow: clip; overflow-clip-margin: 0.14em; vertical-align: top; padding-bottom: 0.08em; }
+  h1 .w > span { display: inline-block; animation: p-word 1000ms var(--spring) both; animation-delay: calc(100ms + var(--i) * 60ms); }
+  .m-on :is(.pf-intro .wrap, .doc-hero-in > div:first-child) > h1 { animation: none !important; opacity: 1 !important; transform: none !important; }
+  .r8-mark { animation: p-pop 700ms var(--spring) 420ms both; }
+}
+@keyframes p-word { from { transform: translateY(110%); } }
+@keyframes p-pop { from { transform: scale(0.6) rotate(-8deg); opacity: 0; } }
+
+/* The sheet and its sky */
+.sheet { position: relative; z-index: 2; margin-top: -40px; border-radius: 40px 40px 0 0; background: var(--alab); overflow: clip; box-shadow: 0 -24px 50px -30px rgba(0, 0, 0, 0.5); }
+.sheet > :not(.sky) { position: relative; z-index: 1; }
+.sky { position: sticky; top: 0; height: 100vh; margin-bottom: -100vh; z-index: 0; pointer-events: none; }
+.sky i { position: absolute; inset: 0; }
+.sky .dawn { background: radial-gradient(40vmax 32vmax at 14% 20%, rgba(20, 184, 166, 0.12), transparent 70%), radial-gradient(36vmax 28vmax at 86% 16%, rgba(110, 207, 246, 0.14), transparent 70%); }
+.sky .dusk { opacity: 0; background: radial-gradient(60vmax 44vmax at 86% 94%, rgba(243, 111, 86, 0.14), transparent 70%), radial-gradient(52vmax 40vmax at 6% 8%, rgba(255, 196, 150, 0.18), transparent 70%), linear-gradient(180deg, #FAF4EE, #F9EFE8); }
+@supports (animation-timeline: scroll()) {
+  .sky .dusk { animation: p-in linear both; animation-timeline: scroll(root); animation-range: 30% 85%; }
+}
+@keyframes p-in { to { opacity: 1; } }
+.sheet > :first-child + * { padding-top: clamp(72px, 9vw, 120px); }
+
+/* Type */
+.sheet h2 { font-family: Sora,"Sora Fallback", Inter,"Inter Fallback", sans-serif; font-weight: 400 !important; letter-spacing: -0.035em !important; }
+.join h2 { font-family: Sora,"Sora Fallback", Inter,"Inter Fallback", sans-serif; font-weight: 300 !important; letter-spacing: -0.04em !important; }
+
+/* Liquid glass surfaces */
+.band-white { background: rgba(255, 255, 255, 0.5) !important; -webkit-backdrop-filter: blur(22px) saturate(160%); backdrop-filter: blur(22px) saturate(160%); border-color: rgba(255, 255, 255, 0.8) !important; }
+.sheet :is(.m-card, .rules li, .legend li, .gate-note, .surfaces li, .road.big .road-col, .sat, .help li, .safety, .ct-patient) { background: rgba(255, 255, 255, 0.82) !important; -webkit-backdrop-filter: blur(18px) saturate(180%); backdrop-filter: blur(18px) saturate(180%); box-shadow: var(--lg-edge) !important; }
+.lg-refract .sheet :is(.m-card, .surfaces li, .road.big .road-col, .sat, .help li) { backdrop-filter: url(#lg-refract) blur(6px) saturate(185%); }
+.sheet .card { background: rgba(255, 255, 255, 0.88) !important; -webkit-backdrop-filter: blur(18px) saturate(160%); backdrop-filter: blur(18px) saturate(160%); box-shadow: var(--lg-edge) !important; }
+:is(.btn, .role-tab, .st-tab):active { transform: scale(1.03, 0.94) !important; transition-duration: 90ms !important; }
+.btn { transition: transform 600ms var(--spring), box-shadow 200ms ease, background-color 200ms ease; }
+@media (hover: hover) and (pointer: fine) { .btn-coral:hover { box-shadow: 0 10px 36px -8px rgba(243, 111, 86, 0.7); transform: translateY(-2px); } }
+
+/* Night: the closing band */
+.join { background: radial-gradient(40vmax 30vmax at 90% 0%, rgba(20, 184, 166, 0.24), transparent 70%), radial-gradient(34vmax 28vmax at 0% 100%, rgba(243, 111, 86, 0.18), transparent 70%), var(--navy) !important; }
+
+/* Motion (wide or narrow, motion allowed): the intro stays while the sheet rises; reveals focus in */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    :is(.pf-intro, .doc-hero) { position: sticky; top: 0; z-index: 0; }
+    :is(.pf-intro, .doc-hero) > .wrap { animation: p-out linear both; animation-timeline: scroll(root); animation-range: 0 70vh; }
+  }
+  .m-on [data-reveal] { filter: blur(10px); transform: translateY(30px) scale(0.985); transition: opacity 700ms var(--ease-out), transform 900ms var(--spring), filter 700ms var(--ease-out) !important; }
+  .m-on [data-reveal].is-in { filter: none; transform: none; }
+}
+@keyframes p-out { to { transform: translateY(-50px) scale(0.97); } }
+@media (max-height: 520px) { :is(.pf-intro, .doc-hero) { position: relative !important; } }
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .band-white, .sheet :is(.m-card, .rules li, .legend li, .gate-note, .surfaces li, .road.big .road-col, .sat, .help li, .safety, .ct-patient, .card) { background: #FFFFFF !important; }
+  .hdr.hdr-pinned { background: rgba(25, 43, 58, 0.97); }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .band-white, .sheet :is(.m-card, .rules li, .legend li, .gate-note, .surfaces li, .road.big .road-col, .sat, .help li, .safety, .ct-patient, .card) { background: #FFFFFF !important; backdrop-filter: none !important; }
+  .hdr.hdr-pinned { background: #192B3A; backdrop-filter: none; }
+}

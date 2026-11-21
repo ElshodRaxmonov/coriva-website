@@ -1,0 +1,64 @@
+/* Round 8 "live" layer: motion switch bar, splash intro, flowing ribbon and breathing glow. */
+.motion-wait body { visibility: hidden; }
+.motion-bar { position: fixed; left: 50%; transform: translateX(-50%); bottom: 16px; width: max-content; z-index: 400; max-width: min(420px, calc(100vw - 32px)); display: flex; align-items: center; gap: 12px; padding: 10px 10px 10px 16px; border-radius: 20px; background: #192B3A; color: #FAF8F5; font: 500 14px/1.4 Inter,"Inter Fallback", system-ui, sans-serif; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16), 0 16px 40px -16px rgba(0, 0, 0, 0.6); }
+.motion-bar button { all: unset; box-sizing: border-box; cursor: pointer; flex: none; display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 999px; background: #F36F56; color: #192B3A; font-weight: 600; }
+.motion-bar button:focus-visible { outline: 3px solid #FAF8F5; outline-offset: 3px; }
+
+/* Splash */
+@property --hole { syntax: '<length-percentage>'; inherits: false; initial-value: 0px; }
+.splash { position: fixed; inset: 0; z-index: 500; display: grid; place-items: center; background: radial-gradient(60vmax 50vmax at 50% 45%, #17394A, #0F1F2E 70%); color: #FAF8F5;
+  -webkit-mask-image: radial-gradient(circle at 50% 45%, transparent var(--hole), #000 calc(var(--hole) + 2px)); mask-image: radial-gradient(circle at 50% 45%, transparent var(--hole), #000 calc(var(--hole) + 2px));
+  transition: --hole 1000ms cubic-bezier(0.7, 0, 0.2, 1); }
+/* Exit: the heart flies toward the viewer, two ribbon rings race outward, and the page is seen through the opening */
+.splash.is-out { --hole: 160vmax; }
+.splash::before, .splash::after { content: ""; position: absolute; left: 50%; top: 45%; width: 20vmin; height: 20vmin; margin: -10vmin 0 0 -10vmin; border-radius: 50%; border: 3px solid #14B8A6; opacity: 0; transform: scale(0.2); pointer-events: none; }
+.splash::after { border-color: #F36F56; }
+.splash.is-out::before { opacity: 0.9; transform: scale(14); transition: transform 1000ms cubic-bezier(0.7, 0, 0.2, 1), opacity 300ms ease; }
+.splash.is-out::after { opacity: 0.9; transform: scale(9); transition: transform 1000ms cubic-bezier(0.7, 0, 0.2, 1) 90ms, opacity 300ms ease 90ms; }
+.splash.is-out .splash-in img { animation: none; transform: scale(22) rotate(8deg); opacity: 0; transition: transform 900ms cubic-bezier(0.6, 0, 0.9, 0.5), opacity 420ms ease 380ms; }
+.splash.is-out :is(.splash-name, .splash-tag, .splash-glow) { animation: none; opacity: 0; transition: opacity 220ms ease; }
+.splash-glow { position: absolute; left: 50%; top: 45%; width: 46vmin; height: 46vmin; margin: -23vmin 0 0 -23vmin; border-radius: 50%; background: radial-gradient(circle, rgba(20, 184, 166, 0.55), rgba(20, 184, 166, 0.12) 45%, transparent 70%); animation: sp-bloom 900ms cubic-bezier(0.23, 1, 0.32, 1) both, sp-beat 900ms ease-in-out 1000ms 1 both; }
+.splash-in { position: relative; display: flex; flex-direction: column; align-items: center; transform: translateY(-5vh); }
+.splash-in img { width: clamp(96px, 16vmin, 168px); height: auto; animation: sp-mark 900ms var(--spring, cubic-bezier(0.23, 1, 0.32, 1)) 120ms both, sp-beat 900ms ease-in-out 1000ms 1; filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.45)); }
+.splash-name { margin: 22px 0 0; font: 600 clamp(34px, 6vmin, 60px)/1 Sora,"Sora Fallback", Inter,"Inter Fallback", sans-serif; letter-spacing: -0.03em; overflow: hidden; }
+.splash-name span { display: inline-block; animation: sp-rise 700ms cubic-bezier(0.23, 1, 0.32, 1) both; animation-delay: calc(480ms + var(--i) * 45ms); }
+.splash-tag { margin: 12px 0 0; font: 400 clamp(15px, 2.2vmin, 19px)/1.4 Inter,"Inter Fallback", system-ui, sans-serif; color: rgba(250, 248, 245, 0.82); animation: sp-fade 700ms ease 900ms both; }
+@keyframes sp-bloom { from { transform: scale(0.3); opacity: 0; } }
+@keyframes sp-mark { from { transform: scale(0.4) rotate(-14deg); opacity: 0; } }
+@keyframes sp-rise { from { transform: translateY(110%); } }
+@keyframes sp-fade { from { opacity: 0; transform: translateY(8px); } }
+@keyframes sp-beat { 0%, 100% { scale: 1; } 18% { scale: 1.07; } 36% { scale: 1; } 54% { scale: 1.04; } 72% { scale: 1; } }
+/* The page's own entrance waits for the splash */
+.splash-on :is(.s1, .pf-intro, .doc-hero) *, .splash-on :is(.s1-photo) { animation-play-state: paused !important; }
+
+/* Ribbon canvas and breathing glow */
+.has-ribbon { isolation: isolate; }
+.ribbon-cv { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+.s1 .ribbon-cv { z-index: 0; opacity: 0.9; top: auto; bottom: 0; height: 56%; }
+.calm .ribbon-cv { height: min(100%, 720px); }
+/* glass over the moving ribbon keeps plain blur (no refraction) */
+.lg-refract .s1-card { backdrop-filter: blur(20px) saturate(160%) !important; }
+.s1 > :not(.ribbon-cv, .s1-photo, .s1-shade) { position: relative; z-index: 1; }
+.s1 > .s1-card { position: absolute; }
+.calm, .join, .s5, .pf-intro, .doc-hero { position: relative; }
+html:not(.rm) :is(.pf-intro, .doc-hero, .join, .calm)::before { content: ""; position: absolute; z-index: -1; pointer-events: none; right: -10vmax; top: -16vmax; width: 60vmax; height: 60vmax; border-radius: 50%; background: radial-gradient(circle, rgba(20, 184, 166, 0.22), transparent 62%); animation: lv-breathe 7s ease-in-out infinite alternate; }
+@keyframes lv-breathe { from { transform: scale(0.86); opacity: 0.55; } to { transform: scale(1.08); opacity: 1; } }
+@media (max-width: 760px) { .s1 > .s1-card { position: relative; } }
+:is(.pf-intro, .doc-hero, .join) { overflow: clip; }
+
+/* Video slots: muted, with a pause control; a still poster under reduced motion */
+.doc-photo.vid { position: relative; }
+.doc-photo.vid video { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 28px; box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.3), 0 50px 90px -40px rgba(0, 0, 0, 0.8); background: #0F1F2E; }
+/* A wide scene (two people across the frame) keeps its width instead of the portrait crop */
+.doc-photo.vid video.wide { aspect-ratio: 3 / 2; object-position: 50% 40%; }
+.bg-vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; opacity: 0.42; }
+.pf-intro.has-vid::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(90deg, rgba(15, 31, 46, 0.92) 0%, rgba(15, 31, 46, 0.72) 45%, rgba(15, 31, 46, 0.35) 100%), linear-gradient(180deg, rgba(15, 31, 46, 0.5), transparent 40%); }
+.vid-btn { all: unset; box-sizing: border-box; cursor: pointer; position: absolute; right: 16px; bottom: 16px; z-index: 2; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: rgba(15, 31, 46, 0.6); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.2); }
+.pf-intro .vid-btn { bottom: 64px; right: max(24px, env(safe-area-inset-right, 0px)); }
+.vid-btn::before { content: ""; width: 12px; height: 14px; border-inline: 4px solid #FAF8F5; box-sizing: border-box; }
+.vid-btn[aria-pressed="true"]::before { width: 0; height: 0; border-inline: 0; border-left: 13px solid #FAF8F5; border-block: 8px solid transparent; margin-left: 3px; }
+.vid-btn:focus-visible { outline: 3px solid #FAF8F5; outline-offset: 3px; }
+
+/* Owner-supplied concept videos say what they are, visibly */
+.vid-btn::after { content: "Concept footage"; position: absolute; right: 54px; top: 50%; transform: translateY(-50%); white-space: nowrap; padding: 6px 12px; border-radius: 999px; background: rgba(15, 31, 46, 0.6); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); color: #FAF8F5; font: 500 13px/1.2 Inter,"Inter Fallback", system-ui, sans-serif; letter-spacing: 0; pointer-events: none; }
+:root[lang="uz"] .vid-btn::after { content: "Konsept video"; }
