@@ -1,0 +1,47 @@
+# English strings with no Uzbek translation (generated; 29 entries)
+# Add them to i18n/uz.json, then re-run tools/build_languages.py.
+
+## 404.html
+- [title] Page not found
+
+## clinics.html
+- [aria-label] Concept footage: a doctor and a patient in a clinic.
+
+## doctors.html
+- [aria-label] Concept footage: a cardiologist greets a patient and reviews his plan.
+
+## medical-disclaimer.html
+- [title] draft
+- [description] Coriva is not an emergency service and does not replace your doctor. Draft, pending legal review.
+- [text] This text has not yet been reviewed by a lawyer.
+- [text] Version 2026-11-24 (draft)
+- [text] Not an emergency service
+- [text] Not a replacement for your doctor
+- [text] Not available yet
+- [text] Questions about your health
+- [text] Coriva is not an emergency service and does not watch your health in real time. If you feel unwell, call your local emergency number.
+- [text] Coriva does not diagnose conditions, prescribe treatment or replace your doctor. Your rehabilitation plan comes from your own doctor, who approves it. AI in Coriva only helps prepare suggestions for a doctor to review.
+- [text] Coriva is being built and is not yet available to patients. Nothing on this website is medical advice.
+- [text] Please talk to your doctor. Do not send health information to Coriva by email.
+
+## partners.html
+- [text] Statuses as of 15 November 2026.
+
+## patients.html
+- [aria-label] Concept footage: a man leaves hospital and follows his plan at home.
+
+## privacy.html
+- [title] draft
+- [text] Version 2026-11-v1 (draft)
+- [text] Data controller: name and address of the legal entity. [LEGAL, owner to provide]
+- [text] From the waitlist and contact forms: role, name, work email, organisation, country, and a message if you write one. [Confirm wording with legal review]
+- [text] To contact you about the pilot. No marketing email. [LEGAL: legal basis]
+- [text] [LEGAL, PW-11: retention periods not yet decided]
+- [text] [PW-16: data residency not yet decided]
+- [text] [LEGAL]
+- [text] [Owner to provide the privacy contact]
+
+## live.js, r7.js (every page)
+- [script] Play video
+- [script] Previous moment
+- [script] Next moment
