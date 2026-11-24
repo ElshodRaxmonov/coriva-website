@@ -6,5 +6,5 @@
   const text = h1.textContent.trim();
   h1.setAttribute('aria-label', text);
   h1.innerHTML = text.split(/\s+/).map((w, i) => `<span class="w" aria-hidden="true"><span style="--i:${i}">${w.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</span></span>`).join(' ')
-    + '<span class="r8-mark" aria-hidden="true"><img src="blob/00ef871558ec9b9f54c10a145d26dde5.png" alt=""></span>';
+    + '<span class="r8-mark" aria-hidden="true"><img src="/blob/00ef871558ec9b9f54c10a145d26dde5.png" alt=""></span>';
 })();
