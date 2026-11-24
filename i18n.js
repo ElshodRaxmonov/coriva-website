@@ -16,7 +16,7 @@ window.__CORIVA_UZ = {"(optional for Other)": "(“Boshqa” uchun ixtiyoriy)", 
   if (lang !== 'uz') return;
   document.documentElement.lang = 'uz';
 
-  const skip = (el) => el.closest('script, style, svg, .proto-nav, .motion-bar, a[lang]');
+  const skip = (el) => el.closest('script, style, svg, a[lang]');
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
   for (const n of nodes) {

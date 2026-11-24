@@ -56,7 +56,7 @@ h1 .w { display: inline-block; }
 .sheet :is(.m-card, .rules li, .legend li, .gate-note, .surfaces li, .road.big .road-col, .sat, .help li, .safety, .ct-patient) { background: rgba(255, 255, 255, 0.82) !important; -webkit-backdrop-filter: blur(18px) saturate(180%); backdrop-filter: blur(18px) saturate(180%); box-shadow: var(--lg-edge) !important; }
 .lg-refract .sheet :is(.m-card, .surfaces li, .road.big .road-col, .sat, .help li) { backdrop-filter: url(#lg-refract) blur(6px) saturate(185%); }
 .sheet .card { background: rgba(255, 255, 255, 0.88) !important; -webkit-backdrop-filter: blur(18px) saturate(160%); backdrop-filter: blur(18px) saturate(160%); box-shadow: var(--lg-edge) !important; }
-:is(.btn, .role-tab, .st-tab):active { transform: scale(1.03, 0.94) !important; transition-duration: 90ms !important; }
+:is(.btn, .role-tab):active { transform: scale(1.03, 0.94) !important; transition-duration: 90ms !important; }
 .btn { transition: transform 600ms var(--spring), box-shadow 200ms ease, background-color 200ms ease; }
 @media (hover: hover) and (pointer: fine) { .btn-coral:hover { box-shadow: 0 10px 36px -8px rgba(243, 111, 86, 0.7); transform: translateY(-2px); } }
 
