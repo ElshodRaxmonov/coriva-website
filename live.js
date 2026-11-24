@@ -1,37 +1,13 @@
-// Round 8 "live" layer (prototype): motion preference switch, splash intro, flowing ribbon background.
+// Live layer: splash intro, flowing ribbon background, video control. Off when the visitor asks for reduced motion.
 // Loaded synchronously at the end of <head>, so the preference is known before anything animates.
 (() => {
   const root = document.documentElement;
-  const osReduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let forced = false;
-  if (!window.__CORIVA_PROD) try { forced = localStorage.getItem('coriva-motion') === 'on'; } catch (e) {}
-  window.__forceMotion = osReduce && forced;
-  const reduce = osReduce && !forced;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;   // honoured as is: no override
   root.classList.toggle('rm', reduce);
-  if (window.__forceMotion) root.classList.remove('m-reduce');
-
-  // Review switch: when the system asks for reduced motion, stylesheets are re-read with that query neutralised.
-  // The production site must keep honouring the system setting; this exists so the motion can be reviewed.
-  const neutral = (css) => css.replace(/\(prefers-reduced-motion:\s*no-preference\)/g, '(min-width: 0px)').replace(/\(prefers-reduced-motion:\s*reduce\)/g, '(max-width: 0px)');
-  if (window.__forceMotion) {
-    root.classList.add('motion-wait');
-    const jobs = [...document.querySelectorAll('link[rel="stylesheet"]')].filter((l) => !/fonts\.googleapis/.test(l.href)).map((l) =>
-      fetch(l.href).then((r) => r.text()).then((t) => { const s = document.createElement('style'); s.textContent = neutral(t); l.replaceWith(s); }).catch(() => {}));
-    document.querySelectorAll('style').forEach((s) => { if (/prefers-reduced-motion/.test(s.textContent)) s.textContent = neutral(s.textContent); });
-    Promise.all(jobs).then(() => root.classList.remove('motion-wait'));
-  }
 
   const ready = (fn) => (document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', fn) : fn());
 
   ready(() => {
-    if (osReduce && !window.__CORIVA_PROD) {
-      const bar = document.createElement('div'); bar.className = 'motion-bar'; bar.setAttribute('role', 'status');
-      bar.innerHTML = forced
-        ? '<span>Motion is playing for review. Your system asks for reduced motion.</span><button type="button">Turn motion off</button>'
-        : '<span>Your system asks for reduced motion, so the animation is off.</span><button type="button">Play motion</button>';
-      bar.querySelector('button').addEventListener('click', () => { try { localStorage.setItem('coriva-motion', forced ? 'off' : 'on'); sessionStorage.removeItem('coriva-splash'); } catch (e) {} location.reload(); });
-      document.body.append(bar);
-    }
     if (!reduce) { splash(); ribbons(); }
     videos();
   });

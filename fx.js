@@ -5,7 +5,7 @@
   const root = document.documentElement;
   const dir = root.dataset.dir;
   const FX = new Set((root.dataset.fx || (dir === 'a' ? 'tilt nosign' : dir === 'b' ? 'split ribbon spotlight magnetic underline' : dir === 'c' ? 'tipcards' : '')).split(/\s+/).filter(Boolean));
-  const reduce = (matchMedia('(prefers-reduced-motion: reduce)').matches && !window.__forceMotion);
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
   const live = !reduce && 'IntersectionObserver' in window;
   const once = (els, cls, opts = {}, stagger = 0) => {
