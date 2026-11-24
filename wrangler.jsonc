@@ -3,7 +3,8 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "coriva",
-  "compatibility_date": "2026-11-01",
+  "compatibility_date": "2026-11-19",
+  "previews": {},
   "assets": {
     "directory": "./",
     "not_found_handling": "404-page",
