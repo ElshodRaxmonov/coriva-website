@@ -190,7 +190,7 @@ def build():
 def sitemap():
     sm = read('sitemap.xml'); locs = re.findall(r'<url><loc>([^<]+)</loc>', sm)
     lastmod = (re.search(r'<lastmod>([^<]+)</lastmod>', sm) or [None, ''])[1]
-    pages = [p for p in PAGES if url('en', p) in locs]
+    pages = [p for loc in locs for p in PAGES if url('en', p) == loc]   # keep the existing order
     rows = []
     for p in pages:
         for lang in (('en', LANG) if PUBLISH else ('en',)):
