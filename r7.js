@@ -7,6 +7,15 @@
   addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(update); }, { passive: true });
   update();
 
+  // Scroll magnetism for the pinned home scenes (live.css shows these stops only while they are pinned):
+  // one at the top of the page in place of the sticky hero, and three in the pinned scene: its start (the
+  // photo fills the screen) and the two rests ("why" fully shown, then "never"). That scene scrolls for its
+  // height less one screen; the stops sit at 0 %, 32 % and 97 % of it.
+  const stop = (parent, top) => { const i = document.createElement('i'); i.className = 'snap-stop'; i.setAttribute('aria-hidden', 'true'); i.style.top = top; parent.append(i); };
+  stop(document.body, '0');
+  const s34 = document.querySelector('.s34');
+  if (s34) for (const at of [0, 0.32, 0.97]) stop(s34, `calc((100% - 100vh) * ${at})`);
+
   // Carousel for each role's day: previous / next buttons and position dots; the strip keeps native swipe
   document.querySelectorAll('.s2-right .day').forEach((day) => {
     const tiles = [...day.children]; if (tiles.length < 2) return;
