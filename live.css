@@ -94,7 +94,6 @@ footer .lang-set a[aria-current] { color: #FAF8F5 !important; font-weight: 600; 
   .btn { white-space: normal; text-align: center; line-height: 1.25; padding-block: 10px; max-width: 100%; box-sizing: border-box; }
   main :is(h1, h2, h3, p, li, summary, label, dd, dt) { overflow-wrap: break-word; }
 }
-=======
 /* ================= Mobile menu: a circle that opens from the button =================
    The burger is two strands, like the logo's ribbon: white, and a shorter coral one. Open, they cross. */
 @media (max-width: 899px) {
