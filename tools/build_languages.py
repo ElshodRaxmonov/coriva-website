@@ -1,45 +1,56 @@
 #!/usr/bin/env python3
-"""Build the Uzbek pages (uz/) from the English pages and i18n/uz.json.
+"""Build the translated pages (uz/, ru/) from the English pages and i18n/<lang>.json.
 
 Usage (from the repository root, Python 3.9+, standard library only):
-    python3 tools/build_languages.py            # rebuild uz/ and the language links
-    python3 tools/build_languages.py --review   # also rewrite TRANSLATIONS_REVIEW.md (resets its tick boxes)
+    python3 tools/build_languages.py            # rebuild uz/, ru/ and the language links
+    python3 tools/build_languages.py --review   # also rewrite the review lists (resets their tick boxes):
+                                                # TRANSLATIONS_REVIEW.md (uz), TRANSLATIONS_REVIEW_RU.md,
+                                                # CLINICAL_REVIEW_UZ.md, CLINICAL_REVIEW_RU.md
 
 What it does
-- English pages at the root are the source. i18n/uz.json maps English text to Uzbek. It is the only place
-  translations live: edit it, never the generated uz/ pages.
-- Text nodes and the alt, aria-label, placeholder and title attributes are translated exactly as the old
-  client-side toggle (i18n.js) did: whole text node, whitespace collapsed, HTML entities decoded.
-- Anything without a translation stays in English and is listed in i18n/missing-uz.txt. Nothing is guessed.
+- English pages at the root are the source. i18n/<lang>.json maps English text to that language. It is the only
+  place translations live: edit it, never the generated pages.
+- Text nodes and the alt, aria-label, placeholder and title attributes are translated as whole text nodes,
+  whitespace collapsed, HTML entities decoded.
+- Anything without a translation stays in English and is listed in i18n/missing-<lang>.txt. Nothing is guessed.
 - Every page gets its own <html lang>, title, description, canonical URL and Open Graph tags.
-- Language links (every <a lang="..">) point to the same page in the other language.
+- Each language link becomes a set (EN, UZ, RU) pointing to the same page in every language, the current one
+  marked aria-current. The header shows short codes; the menu and footer show the names.
 
 Publishing
-- PUBLISH = False while the Uzbek text is a draft: uz/ pages are noindex, stay out of sitemap.xml, and no
-  hreflang links are written. Set PUBLISH = True only after the native and clinical review is done.
+- PUBLISH[lang] = False while a language is a draft: its pages are noindex, stay out of sitemap.xml, and no
+  hreflang links point to it. Set it True only after that language's native and clinical review.
 """
 import html, json, os, re, sys
 
-PUBLISH = False
+# Per language: True only after its native and clinical review. Unpublished pages are noindex, stay out of
+# sitemap.xml and get no hreflang.
+PUBLISH = {'uz': False, 'ru': False}
 SITE = 'https://coriva.uz'
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-LANG, LOCALE, LANG_NAME = 'uz', 'uz_UZ', 'O‘zbekcha'
+# code: (Open Graph locale, name in its own language, short code shown in the header)
+LANGS = {'en': ('en_US', 'English', 'EN'), 'uz': ('uz_UZ', 'O‘zbekcha', 'UZ'), 'ru': ('ru_RU', 'Русский', 'RU')}
+TRANSLATED = ('uz', 'ru')
+LANG = 'uz'   # the language being built; set by build()
 ATTRS = ('alt', 'aria-label', 'placeholder', 'title')
-# Text that scripts write at run time (live.js, r7.js). The Uzbek pages carry these in window.__CORIVA_T.
-SCRIPT_STRINGS = ('Play video', 'Pause video', 'Previous moment', 'Next moment', 'Every heartbeat matters.')
+# Text that scripts write at run time (live.js, r7.js). Translated pages carry these in window.__CORIVA_T.
+SCRIPT_STRINGS = ('Play video', 'Pause video', 'Previous moment', 'Next moment', 'Every heartbeat matters.', 'Close menu')
 
 def read(p): return open(os.path.join(ROOT, p), encoding='utf-8').read()
 def write(p, t):
     p = os.path.join(ROOT, p); os.makedirs(os.path.dirname(p), exist_ok=True)
     open(p, 'w', encoding='utf-8').write(t)
 
-UZ = json.loads(read('i18n/uz.json'))
+DICTS = {l: json.loads(read(f'i18n/{l}.json')) for l in TRANSLATED}
+UZ = DICTS['uz']   # the dictionary of the language being built; set by build()
 norm = lambda s: re.sub(r'\s+', ' ', html.unescape(s)).strip()
 PAGES = sorted(f[:-5] for f in os.listdir(ROOT) if f.endswith('.html'))
 url = lambda lang, page: SITE + ('/' if lang == 'en' else f'/{lang}/') + ('' if page == 'index' else page)
-missing = {}   # page -> ordered set of English strings without a translation
-SKIP = {'English', LANG_NAME}   # language names, and Uzbek text written by split_headlines()
-used = {}      # English string -> (Uzbek, first page)
+MISSING = {l: {} for l in TRANSLATED}   # per language: page -> ordered set of English strings without a translation
+USED = {l: {} for l in TRANSLATED}      # per language: English string -> (translation, first page)
+missing, used = MISSING['uz'], USED['uz']
+SKIP = {v[1] for v in LANGS.values()} | {v[2] for v in LANGS.values()}   # language names, and headline words written by split_headlines()
+published = lambda lang: lang == 'en' or PUBLISH.get(lang, False)
 
 def tr(s, page, kind='text'):
     key = norm(s)
@@ -56,13 +67,21 @@ def protect(t):
     return re.sub(r'<(script|style|svg)\b.*?</\1>', put, t, flags=re.S), keep
 def restore(t, keep): return re.sub(r'\x00(\d+)\x00', lambda m: keep[int(m.group(1))], t)
 
-def lang_links(t, page, to):
-    """Point every <a lang=".."> at the same page in language `to`."""
-    href, name = page_url(to, page), (LANG_NAME if to == LANG else 'English')
+def lang_links(t, page, cur):
+    """Replace each language link (a single <a lang=".."> in the English source, or a set written by an earlier
+    run) with a set linking the same page in every language; the page's own language is marked aria-current.
+    The header (class lang-inline) shows short codes with the full name as the accessible name."""
     def fix(m):
-        attrs = re.sub(r'\s(?:href|lang|hreflang|role)="[^"]*"', '', m.group(1))
-        return f'<a{attrs} href="{href}" lang="{to}" hreflang="{to}">{name}</a>'
-    return re.sub(r'<a((?:\s[^>]*)?\slang="[a-z]{2}"[^>]*)>[^<]*</a>', fix, t)
+        first = re.search(r'<a((?:\s[^>]*)?)>', m.group(0)).group(1)
+        attrs = re.sub(r'\s(?:href|lang|hreflang|role|aria-current|aria-label|title)="[^"]*"', '', first)
+        short = 'lang-inline' in attrs
+        out = []
+        for l, (_, name, code) in LANGS.items():
+            label = f' aria-label="{name}" title="{name}"' if short else ''
+            mark = ' aria-current="true"' if l == cur else ''
+            out.append(f'<a{attrs} href="{page_url(l, page)}" lang="{l}" hreflang="{l}"{label}{mark}>{code if short else name}</a>')
+        return '<span class="lang-set">' + ''.join(out) + '</span>'
+    return re.sub(r'<span class="lang-set">.*?</span>|<a(?:\s[^>]*)?\slang="[a-z]{2}"[^>]*>[^<]*</a>', fix, t, flags=re.S)
 
 def split_headlines(t, page):
     """Home headlines are pre-split into animated word spans: rebuild them from the translated name."""
@@ -122,7 +141,7 @@ def page_link(v):
     return None
 
 def rebase_assets(t):
-    """uz/ pages live one folder down: assets move to ../, links between pages go to the Uzbek page."""
+    """Translated pages live one folder down: assets move to ../, links between pages go to the same language."""
     def one(v):
         link = page_link(v)
         if link: return page_url(LANG, link[0]) + link[1]
@@ -137,10 +156,11 @@ def head(t, page, lang):
     t = re.sub(r'<link rel="canonical" href="[^"]*">', f'<link rel="canonical" href="{url(lang, page)}">', t, count=1)
     t = re.sub(r'<meta property="og:url" content="[^"]*">', f'<meta property="og:url" content="{url(lang, page)}">', t, count=1)
     t = re.sub(r'\n<meta property="og:locale"[^>]*>', '', t)
-    t = t.replace('<meta property="og:type"', f'<meta property="og:locale" content="{"en_US" if lang == "en" else LOCALE}">\n<meta property="og:type"', 1)
+    t = t.replace('<meta property="og:type"', f'<meta property="og:locale" content="{LANGS[lang][0]}">\n<meta property="og:type"', 1)
     t = re.sub(r'\n<link rel="alternate" hreflang="[^"]*" href="[^"]*">', '', t)
-    if PUBLISH and page not in ('404',) and 'noindex' not in read(page + '.html'):
-        alts = ''.join(f'\n<link rel="alternate" hreflang="{l}" href="{url(l, page)}">' for l in ('en', LANG)) + f'\n<link rel="alternate" hreflang="x-default" href="{url("en", page)}">'
+    live = [l for l in LANGS if published(l)]
+    if len(live) > 1 and published(lang) and page not in ('404',) and 'noindex' not in read(page + '.html'):
+        alts = ''.join(f'\n<link rel="alternate" hreflang="{l}" href="{url(l, page)}">' for l in live) + f'\n<link rel="alternate" hreflang="x-default" href="{url("en", page)}">'
         t = t.replace(f'<link rel="canonical" href="{url(lang, page)}">', f'<link rel="canonical" href="{url(lang, page)}">' + alts, 1)
     return t
 
@@ -170,13 +190,29 @@ def translate_head(t, page):
     return t
 
 def build():
+    global LANG, UZ, missing, used
+    english = {}
     for page in PAGES:
         en = read(page + '.html')
         en = re.sub(r'\n?<script src="i18n\.js[^"]*"[^>]*></script>', '', en)   # static pages replace the toggle
-        en = lang_links(en, page, 'uz')
+        en = lang_links(en, page, 'en')
         en = head(en, page, 'en')
-        write(page + '.html', en)
-        uz = en
+        write(page + '.html', en); english[page] = en
+    for LANG in TRANSLATED:
+        UZ, missing, used = DICTS[LANG], MISSING[LANG], USED[LANG]
+        build_language(english)
+    sitemap()
+    if '--review' in sys.argv:
+        for LANG in TRANSLATED:
+            UZ, missing, used = DICTS[LANG], MISSING[LANG], USED[LANG]
+            review()
+    for l in TRANSLATED:
+        print(f'{len(PAGES)} pages -> {l}/, {len(USED[l])} strings translated, {sum(len(v) for v in MISSING[l].values())} missing (i18n/missing-{l}.txt), published={PUBLISH[l]}')
+
+def build_language(english):
+    """One translated language (LANG, with UZ as its dictionary) for every page."""
+    for page in PAGES:
+        uz = english[page]
         uz = re.sub(r'\n?<script type="application/ld\+json">.*?</script>', '', uz, flags=re.S)
         uz = translate_head(uz, page)
         uz = head(uz, page, LANG)
@@ -185,20 +221,17 @@ def build():
             u = tr(s, '(scripts, every page)', 'script')
             if u: table[s] = u
         uz = uz.replace('<meta charset="utf-8">', '<meta charset="utf-8">\n<script>window.__CORIVA_T = ' + json.dumps(table, ensure_ascii=False) + ';</script>', 1)
-        if not PUBLISH: uz = re.sub(r'<meta name="robots" content="[^"]*">', '<meta name="robots" content="noindex, follow">', uz, count=1)
+        if not PUBLISH[LANG]: uz = re.sub(r'<meta name="robots" content="[^"]*">', '<meta name="robots" content="noindex, follow">', uz, count=1)
         i = uz.index('<body'); b = split_headlines(uz[i:], page); b = translate_body(b, page)
         uz = presplit_h1(uz[:i] + b)
         uz = rebase_assets(uz)
-        uz = lang_links(uz, page, 'en')
-        write(f'{LANG}/{page}.html', '<!-- Generated by tools/build_languages.py from ../' + page + '.html and i18n/uz.json. Do not edit. -->\n' + uz)
-    sitemap()
-    lines = [f'# English strings with no Uzbek translation (generated; {sum(len(v) for v in missing.values())} entries)', '# Add them to i18n/uz.json, then re-run tools/build_languages.py.', '']
+        uz = lang_links(uz, page, LANG)
+        write(f'{LANG}/{page}.html', f'<!-- Generated by tools/build_languages.py from ../{page}.html and i18n/{LANG}.json. Do not edit. -->\n' + uz)
+    lines = [f'# English strings with no {LANGS[LANG][1]} translation (generated; {sum(len(v) for v in missing.values())} entries)', f'# Add them to i18n/{LANG}.json, then re-run tools/build_languages.py.', '']
     for page in PAGES:
         if page in missing: lines += [f'## {page}.html'] + [f'- {k}' for k in missing[page]] + ['']
     if '(scripts, every page)' in missing: lines += ['## live.js, r7.js (every page)'] + [f'- {k}' for k in missing['(scripts, every page)']] + ['']
-    write('i18n/missing-uz.txt', '\n'.join(lines))
-    if '--review' in sys.argv: review()
-    print(f'{len(PAGES)} pages -> {LANG}/, {len(used)} strings translated, {sum(len(v) for v in missing.values())} missing (i18n/missing-uz.txt), PUBLISH={PUBLISH}')
+    write(f'i18n/missing-{LANG}.txt', '\n'.join(lines))
 
 def sitemap():
     sm = read('sitemap.xml'); locs = re.findall(r'<url><loc>([^<]+)</loc>', sm)
@@ -206,22 +239,31 @@ def sitemap():
     pages = [p for loc in locs for p in PAGES if url('en', p) == loc]   # keep the existing order
     rows = []
     for p in pages:
-        for lang in (('en', LANG) if PUBLISH else ('en',)):
-            alts = ''.join(f'<xhtml:link rel="alternate" hreflang="{l}" href="{url(l, p)}"/>' for l in ('en', LANG)) + f'<xhtml:link rel="alternate" hreflang="x-default" href="{url("en", p)}"/>' if PUBLISH else ''
+        live = [l for l in LANGS if published(l)]
+        for lang in live:
+            alts = ''.join(f'<xhtml:link rel="alternate" hreflang="{l}" href="{url(l, p)}"/>' for l in live) + f'<xhtml:link rel="alternate" hreflang="x-default" href="{url("en", p)}"/>' if len(live) > 1 else ''
             rows.append(f'  <url><loc>{url(lang, p)}</loc>' + (f'<lastmod>{lastmod}</lastmod>' if lastmod else '') + alts + '</url>')
-    ns = ' xmlns:xhtml="http://www.w3.org/1999/xhtml"' if PUBLISH else ''
+    ns = ' xmlns:xhtml="http://www.w3.org/1999/xhtml"' if len([l for l in LANGS if published(l)]) > 1 else ''
     write('sitemap.xml', f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"{ns}>\n' + '\n'.join(rows) + '\n</urlset>\n')
 
+ENGLISH_NAME = {'uz': 'Uzbek (Latin)', 'ru': 'Russian'}
+SEARCH_TERMS = {
+    'uz': ['- [ ] Home title is "Coriva · Yurak reabilitatsiyasi uyda davom etadi". Keep "yurak reabilitatsiyasi", or prefer "kardioreabilitatsiya"?',
+           '- [ ] Home description: add "kardioreabilitatsiya" if it reads naturally, e.g. in the sentence that already says "platforma".',
+           '- [ ] Partners heading "Yurak reabilitatsiyasi uchun yagona tizim." uses the same term: keep both pages consistent.'],
+    'ru': ['- [ ] Home title uses «Кардиореабилитация». Keep it (the term people search for), or prefer «реабилитация сердца»?',
+           '- [ ] Where the English says "cardiac rehabilitation", use «кардиореабилитация» consistently across pages.'],
+}
+
 def review():
-    out = ['# Translation review', '', 'Uzbek (Latin): **draft, needs native and clinical review.** The uz/ pages stay `noindex` until every box is ticked',
-           'and the owner confirms; then set `PUBLISH = True` in tools/build_languages.py and re-run it.', '',
-           'Fix a translation in `i18n/uz.json`, never in uz/. Strings marked ⚕ make a clinical or safety statement: they need a clinician as well as a native reader.', '',
-           f'Untranslated strings: see `i18n/missing-uz.txt`.', '']
+    """TRANSLATIONS_REVIEW[_RU].md (every string) and CLINICAL_REVIEW_<LANG>.md (the ⚕ lines) for LANG."""
+    suffix = '' if LANG == 'uz' else '_' + LANG.upper()
+    out = ['# Translation review', '', f'{ENGLISH_NAME[LANG]}: **draft, needs native and clinical review.** The {LANG}/ pages stay `noindex` until every box is ticked',
+           f"and the owner confirms; then set `PUBLISH['{LANG}'] = True` in tools/build_languages.py and re-run it.", '',
+           f'Fix a translation in `i18n/{LANG}.json`, never in {LANG}/. Strings marked ⚕ make a clinical or safety statement: they need a clinician as well as a native reader.', '',
+           f'Untranslated strings: see `i18n/missing-{LANG}.txt`.', '']
     out += ['## Search terms (proposal, for the reviewer to accept or reject)', '',
-            'Use these only where the page already says the same thing in English. No new claims.', '',
-            '- [ ] Home title is "Coriva · Yurak reabilitatsiyasi uyda davom etadi". Keep "yurak reabilitatsiyasi", or prefer "kardioreabilitatsiya"?',
-            '- [ ] Home description: add "kardioreabilitatsiya" if it reads naturally, e.g. in the sentence that already says "platforma".',
-            '- [ ] Partners heading "Yurak reabilitatsiyasi uchun yagona tizim." uses the same term: keep both pages consistent.', '']
+            'Use these only where the page already says the same thing in English. No new claims.', ''] + SEARCH_TERMS[LANG] + ['']
     # ⚕ = a clinical or safety statement a cardiologist should read: medicine, emergencies, AI, approvals,
     # decisions, activity guidance, monitoring and handover. Labels like "Doctors" are not statements, so
     # most topics need four words or more; the strongest topics are flagged at any length.
@@ -233,22 +275,22 @@ def review():
     for en, (u, page) in used.items(): by_page.setdefault(page, []).append((en, u))
     for page in PAGES:
         if page not in by_page: continue
-        out += [f'## {page}.html', '', '| ✓ | English | Uzbek |', '|---|---|---|']
+        out += [f'## {page}.html', '', f'| ✓ | English | {ENGLISH_NAME[LANG]} |', '|---|---|---|']
         out += [f'| ☐{" ⚕" if clin(en) else ""} | {en.replace("|", "\\|")} | {u.replace("|", "\\|")} |' for en, u in by_page[page]] + ['']
-    write('TRANSLATIONS_REVIEW.md', '\n'.join(out))
+    write(f'TRANSLATIONS_REVIEW{suffix}.md', '\n'.join(out))
     # The ⚕ lines alone, for the cardiologist: each once, grouped by the page where it first appears
     rows = [(page, en, u) for page in PAGES for en, u in by_page.get(page, []) if clin(en)]
-    cl = ['# Clinical review: Uzbek text on coriva.uz', '',
-          f'{len(rows)} lines that make a clinical or safety statement. Please check that each Uzbek line says the same as',
+    cl = [f'# Clinical review: {ENGLISH_NAME[LANG]} text on coriva.uz', '',
+          f'{len(rows)} lines that make a clinical or safety statement. Please check that each {ENGLISH_NAME[LANG]} line says the same as',
           'the English, is medically correct and could not be misread by a patient. Tick the box, or write the',
           'correction in the last column. Lines that name 103 are a deliberate localisation (owner, 2026-11-27).', '',
           'Generated by tools/build_languages.py --review from i18n/uz.json. Do not edit the translations here.', '']
     for page in PAGES:
         mine = [(en, u) for pg, en, u in rows if pg == page]
         if not mine: continue
-        cl += [f'## {page}', '', '| ✓ | English | Uzbek | Correction |', '|---|---|---|---|']
+        cl += [f'## {page}', '', f'| ✓ | English | {ENGLISH_NAME[LANG]} | Correction |', '|---|---|---|---|']
         cl += [f'| ☐ | {en.replace("|", "\\|")} | {u.replace("|", "\\|")} | |' for en, u in mine] + ['']
-    write('CLINICAL_REVIEW_UZ.md', '\n'.join(cl))
+    write(f'CLINICAL_REVIEW_{LANG.upper()}.md', '\n'.join(cl))
 
 if __name__ == '__main__':
     build()
