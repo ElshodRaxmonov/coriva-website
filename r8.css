@@ -105,3 +105,5 @@
 .s2-left .role-tabs, .s2-left .role-tab { box-sizing: border-box; max-width: 100%; min-width: 0; }
 /* Resize audit: below 1280 px the floating demo widgets crowd the scene's headline, so they rest */
 @media (max-width: 1279px) { .s5-widgets { display: none !important; } }
+/* Uzbek day names (Chorshanba, Payshanba) are longer than "Wed"/"Thu": a smaller size keeps them inside the card */
+:root[lang="uz"] #i3-rp-1 .moment .t { font-size: clamp(30px, 2.3vw, 32px); }
