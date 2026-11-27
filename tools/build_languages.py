@@ -58,8 +58,7 @@ def restore(t, keep): return re.sub(r'\x00(\d+)\x00', lambda m: keep[int(m.group
 
 def lang_links(t, page, to):
     """Point every <a lang=".."> at the same page in language `to`."""
-    if to == 'uz': href, name = ('uz/' if page == 'index' else f'uz/{page}.html'), LANG_NAME
-    else: href, name = ('../' if page == 'index' else f'../{page}.html'), 'English'
+    href, name = page_url(to, page), (LANG_NAME if to == LANG else 'English')
     def fix(m):
         attrs = re.sub(r'\s(?:href|lang|hreflang|role)="[^"]*"', '', m.group(1))
         return f'<a{attrs} href="{href}" lang="{to}" hreflang="{to}">{name}</a>'
@@ -109,11 +108,25 @@ def translate_body(t, page):
             out.append(tok)
     return restore(''.join(out), keep)
 
+def page_url(lang, page):
+    """Clean root-relative address of a page, as in sitemap.xml: / or /platform, /uz/ or /uz/platform."""
+    return ('/' if lang == 'en' else f'/{lang}/') + ('' if page == 'index' else page)
+
+def page_link(v):
+    """(page, '#fragment') if v links to one of the site's pages, in any form the English pages use:
+    ./  /  index.html  platform.html  /platform  (each with or without #fragment). Otherwise None."""
+    m = re.fullmatch(r'(?:\./|/)(#.*)?', v)
+    if m: return 'index', m.group(1) or ''
+    m = re.fullmatch(r'(/)?([\w-]+)(\.html)?(#.*)?', v)
+    if m and (m.group(1) or m.group(3)) and m.group(2) in PAGES: return m.group(2), m.group(4) or ''
+    return None
+
 def rebase_assets(t):
-    """uz/ pages live one folder down: assets move to ../, links between pages stay inside uz/."""
+    """uz/ pages live one folder down: assets move to ../, links between pages go to the Uzbek page."""
     def one(v):
+        link = page_link(v)
+        if link: return page_url(LANG, link[0]) + link[1]
         if v.startswith(('http:', 'https:', '//', '/', '#', 'mailto:', 'tel:', 'data:', '../')): return v
-        if v == './' or re.match(r'[\w-]+\.html(?:#.*)?$', v): return v
         return '../' + v
     t = re.sub(r'(\s(?:src|href|poster))="([^"]*)"', lambda m: f'{m.group(1)}="{one(m.group(2))}"', t)
     return re.sub(r'(\ssrcset)="([^"]*)"', lambda m: m.group(1) + '="' + ', '.join(' '.join([one(p.split()[0])] + p.split()[1:]) for p in m.group(2).split(',')) + '"', t)
