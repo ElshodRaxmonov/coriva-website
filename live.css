@@ -61,12 +61,11 @@ html:not(.rm) :is(.pf-intro, .doc-hero, .join, .calm)::before { content: ""; pos
 
 /* Scroll magnetism: when a scroll ends close to the start of a section, the page settles there.
    "proximity" only pulls near an edge; a section taller than the screen scrolls freely inside.
-   Off with reduced motion, because the settling is movement the visitor did not make. */
+   On for everyone, reduced motion included (owner, 2026-11-27): it only finishes a scroll the visitor
+   started, and adds no animation of its own. */
 .snap-stop { display: none; }
-@media (prefers-reduced-motion: no-preference) {
-  html { scroll-snap-type: y proximity; }
-  main > :first-child, .sheet > :not(.sky), .calm > section { scroll-snap-align: start; }
-}
+html { scroll-snap-type: y proximity; }
+main > :first-child, .sheet > :not(.sky), .calm > section { scroll-snap-align: start; }
 /* Stops inside the pinned home scene, under the same conditions as the scene itself (r7.css) */
 @supports (animation-timeline: view()) and (timeline-scope: --x) {
   @media (min-width: 1100px) and (min-height: 760px) and (prefers-reduced-motion: no-preference) {
