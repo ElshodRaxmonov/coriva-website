@@ -11,6 +11,7 @@
   ready(() => {
     if (!reduce) { splash(); ribbons(); }
     videos();
+    menu();
   });
 
   // ---------- Videos: play only while in view and only when motion is allowed; the button always works ----------
@@ -85,5 +86,80 @@
       for (const it of items) if (it.on && !(it.pinned && scrollY > it.host.offsetHeight)) draw(it, t);
     };
     requestAnimationFrame(loop);
+  }
+  // ---------- Mobile menu: a circle that opens from the button and fills the screen ----------
+  // Takes over from the small toggle each page carries inline (the button is cloned to drop its listener).
+  // The panel moves to <body> so no transformed or blurred header can clip it.
+  function menu() {
+    const old = document.querySelector('.hdr .menu-btn'), panel = document.querySelector('.menu-panel');
+    if (!old || !panel) return;
+    const T = (x) => (window.__CORIVA_T || {})[x] || x;   // run-time strings on translated pages
+    const btn = old.cloneNode(true); old.replaceWith(btn);
+    panel.classList.add('mnav'); panel.hidden = true; document.body.append(panel);
+    const list = panel.querySelector('ul');
+    const here = location.pathname.replace(/\.html$/, '').replace(/\/index$/, '/') || '/';
+    [...list.children].forEach((li, i) => {
+      li.style.setProperty('--i', i);
+      const a = li.querySelector('a');
+      if (!a) return;
+      if (a.hasAttribute('lang')) {
+        li.classList.add('mnav-lang');
+        // Pages that still switch language in the browser (i18n.js): follow the header's working switch
+        const head = document.querySelector('.hdr a.lang-inline');
+        if (a.getAttribute('href') === '#' && head) { a.textContent = head.textContent; a.lang = head.lang; a.addEventListener('click', (e) => { e.preventDefault(); head.click(); }); }
+        return;
+      }
+      const path = new URL(a.getAttribute('href'), location.href).pathname.replace(/\.html$/, '') || '/';
+      if (path === here) a.setAttribute('aria-current', 'page');
+    });
+    // Group the language links (one or more) on a single row
+    const langs = [...list.querySelectorAll('.mnav-lang')];
+    if (langs.length > 1) { const row = langs[0]; langs.slice(1).forEach((li) => { row.append(...li.childNodes); li.remove(); }); }
+    const cta = document.querySelector('.hdr .hdr-cta');
+    if (cta) {
+      const c = document.createElement('a'); c.className = 'mnav-cta'; c.href = cta.getAttribute('href');
+      c.textContent = (cta.querySelector('.lbl-full') || cta).textContent.trim();
+      c.style.setProperty('--i', list.children.length); panel.querySelector('nav').append(c);
+    }
+    // Everything except the header's own branch and the menu: made inert while the menu is open
+    const outside = () => {
+      const out = [];
+      for (let n = btn.closest('header'); n && n !== document.body; n = n.parentElement)
+        for (const sib of n.parentElement.children) if (sib !== n && sib !== panel && !sib.matches('script, style, link')) out.push(sib);
+      return out;
+    };
+    let closing = 0, lastFocus = null;
+    const set = (open) => {
+      const r = btn.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+      panel.style.setProperty('--mx', x + 'px'); panel.style.setProperty('--my', y + 'px');
+      panel.style.setProperty('--mr', Math.ceil(Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))) + 'px');
+      btn.setAttribute('aria-expanded', String(open)); btn.setAttribute('aria-label', open ? T('Close menu') : btn.dataset.openLabel);
+      document.documentElement.classList.toggle('mnav-on', open);
+      outside().forEach((el) => { el.inert = open; });
+      clearTimeout(closing);
+      if (open) {
+        lastFocus = document.activeElement; panel.hidden = false;
+        requestAnimationFrame(() => requestAnimationFrame(() => panel.classList.add('is-open')));
+        setTimeout(() => { const f = panel.querySelector('a'); if (f && btn.getAttribute('aria-expanded') === 'true') f.focus({ preventScroll: true }); }, reduce ? 0 : 280);
+      } else {
+        panel.classList.remove('is-open');
+        closing = setTimeout(() => { panel.hidden = true; }, reduce ? 0 : 520);
+        if (panel.contains(document.activeElement)) btn.focus({ preventScroll: true });
+      }
+    };
+    btn.dataset.openLabel = btn.getAttribute('aria-label') || 'Menu';
+    btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'));
+    panel.addEventListener('click', (e) => { if (e.target.closest('a')) set(false); });
+    document.addEventListener('keydown', (e) => {
+      if (btn.getAttribute('aria-expanded') !== 'true') return;
+      if (e.key === 'Escape') { set(false); btn.focus(); return; }
+      if (e.key !== 'Tab') return;
+      // Keep focus between the button and the menu while it is open
+      const items = [btn, ...panel.querySelectorAll('a')], i = items.indexOf(document.activeElement);
+      e.preventDefault();
+      items[(i + (e.shiftKey ? -1 : 1) + items.length) % items.length].focus();
+    });
+    // Wider than the burger breakpoint: the menu has no button, so it must not stay open
+    addEventListener('resize', () => { if (btn.getAttribute('aria-expanded') === 'true' && getComputedStyle(btn).display === 'none') set(false); });
   }
 })();
