@@ -75,8 +75,18 @@
   // ---------- Header: hides while reading down, returns on scroll-up (UX brief §8) ----------
   const hdr = document.querySelector('.hdr');
   if (hdr) {
-    let last = window.scrollY, ticking = false;
+    // It hides only when the visitor scrolls down. Scroll magnetism can pull the page down a little right
+    // after the visitor scrolls up (to a nearby section start); that movement is not theirs, so it must not
+    // hide the header and its menu button again. `intent` is the direction of the visitor's last input.
+    let last = window.scrollY, ticking = false, intent = 0, touchY = null;
     const menuOpen = () => hdr.querySelector('.menu-btn[aria-expanded="true"]');
+    addEventListener('wheel', (e) => { if (e.deltaY) intent = Math.sign(e.deltaY); }, { passive: true });
+    addEventListener('touchstart', (e) => { touchY = e.touches[0].clientY; }, { passive: true });
+    addEventListener('touchmove', (e) => { const y = e.touches[0].clientY; if (touchY !== null && Math.abs(y - touchY) > 2) { intent = y < touchY ? 1 : -1; touchY = y; } }, { passive: true });
+    addEventListener('keydown', (e) => {
+      if (['ArrowDown', 'PageDown', 'End', ' '].includes(e.key)) intent = 1;
+      else if (['ArrowUp', 'PageUp', 'Home'].includes(e.key)) intent = -1;
+    });
     const update = () => {
       ticking = false;
       const y = window.scrollY;
@@ -84,7 +94,7 @@
       else {
         hdr.classList.add('hdr-pinned');
         if (y < last - 4 || menuOpen()) hdr.classList.add('hdr-show');
-        else if (y > last + 4) hdr.classList.remove('hdr-show');
+        else if (y > last + 4 && intent !== -1) hdr.classList.remove('hdr-show');
       }
       last = y;
     };
