@@ -58,3 +58,21 @@ html:not(.rm) :is(.pf-intro, .doc-hero, .join, .calm)::before { content: ""; pos
 /* Owner-supplied concept videos say what they are, visibly */
 .vid-btn::after { content: "Concept footage"; position: absolute; right: 54px; top: 50%; transform: translateY(-50%); white-space: nowrap; padding: 6px 12px; border-radius: 999px; background: rgba(15, 31, 46, 0.6); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); color: #FAF8F5; font: 500 13px/1.2 Inter,"Inter Fallback", system-ui, sans-serif; letter-spacing: 0; pointer-events: none; }
 :root[lang="uz"] .vid-btn::after { content: "Konsept video"; }
+
+/* Scroll magnetism: when a scroll ends close to the start of a section, the page settles there.
+   "proximity" only pulls near an edge; a section taller than the screen scrolls freely inside.
+   Off with reduced motion, because the settling is movement the visitor did not make. */
+.snap-stop { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-snap-type: y proximity; }
+  main > :first-child, .sheet > :not(.sky), .calm > section { scroll-snap-align: start; }
+}
+/* Stops inside the pinned home scene, under the same conditions as the scene itself (r7.css) */
+@supports (animation-timeline: view()) and (timeline-scope: --x) {
+  @media (min-width: 1100px) and (min-height: 760px) and (prefers-reduced-motion: no-preference) {
+    /* The pinned hero is sticky, so its start would move with the page and count as snapped everywhere;
+       a fixed stop at the top replaces it. The pinned scene uses its own stops, not its start. */
+    main > .s1, .sheet > .s34 { scroll-snap-align: none; }
+    .snap-stop { display: block; position: absolute; left: 0; width: 1px; height: 1px; pointer-events: none; visibility: hidden; scroll-snap-align: start; }
+  }
+}
