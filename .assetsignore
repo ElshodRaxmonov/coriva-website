@@ -1,0 +1,9 @@
+# Repository files that are not part of the website
+.git
+.github
+wrangler.jsonc
+README.md
+TRANSLATIONS_REVIEW.md
+tools
+i18n
+node_modules
