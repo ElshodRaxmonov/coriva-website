@@ -120,3 +120,6 @@
 .faq summary:hover::after { box-shadow: inset 0 0 0 1.5px #0F766E; }
 .faq details > p { max-width: 62ch; }
 @media (prefers-reduced-motion: reduce) { .faq summary, .faq summary::after { transition: none; } }
+/* Russian hero: «Кардиореабилитация» is 10.5 em wide, too wide for a phone at the usual 40 px minimum;
+   the size follows the screen so the word always fits (desktop is unchanged: 7.6vw wins there) */
+:root[lang="ru"] .s1-title { font-size: clamp(26px, min(7.6vw, calc((100vw - 48px) / 10.8)), 116px); }

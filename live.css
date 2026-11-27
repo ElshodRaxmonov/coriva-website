@@ -75,3 +75,23 @@ main > :first-child, .sheet > :not(.sky), .calm > section { scroll-snap-align: s
     .snap-stop { display: block; position: absolute; left: 0; width: 1px; height: 1px; pointer-events: none; visibility: hidden; scroll-snap-align: start; }
   }
 }
+
+/* ================= Language set: EN / UZ / RU, the current one marked =================
+   Header: a small segmented pill of codes (the full name is the accessible name). Footer and menu: names. */
+.hdr .lang-set { display: inline-flex; align-items: center; gap: 2px; padding: 3px; margin-left: 4px; border-radius: 999px; box-shadow: inset 0 0 0 1px rgba(250, 248, 245, 0.22); }
+.hdr .lang-set .lang-inline { min-height: 34px; min-width: 38px; padding: 0 10px; justify-content: center; border-radius: 999px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; color: rgba(250, 248, 245, 0.8); transition: background-color 160ms ease, color 160ms ease; }
+.hdr .lang-set .lang-inline:hover { color: #FAF8F5; background: rgba(250, 248, 245, 0.1); }
+.hdr .lang-set .lang-inline[aria-current] { background: #FAF8F5; color: #0F1F2E; }
+.hdr .lang-set .lang-inline:focus-visible { outline: 2px solid #FAF8F5; outline-offset: 2px; }
+@media (max-width: 899px) { .hdr .lang-set { display: none; } }
+footer .lang-set { display: inline-flex; flex-wrap: wrap; gap: 4px 18px; }
+footer .lang-set a[aria-current] { color: #FAF8F5 !important; font-weight: 600; }
+.menu-panel .lang-set { display: flex; flex-wrap: wrap; gap: 10px; }
+.mnav-lang .lang-set a { display: inline-flex; }
+
+/* Long labels (Russian and Uzbek words run longer): on narrow screens a button's label wraps onto a second
+   line instead of widening its card past the screen, and very long words may break. */
+@media (max-width: 520px) {
+  .btn { white-space: normal; text-align: center; line-height: 1.25; padding-block: 10px; max-width: 100%; box-sizing: border-box; }
+  main :is(h1, h2, h3, p, li, summary, label, dd, dt) { overflow-wrap: break-word; }
+}

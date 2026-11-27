@@ -1,7 +1,7 @@
 # Translation review
 
 Uzbek (Latin): **draft, needs native and clinical review.** The uz/ pages stay `noindex` until every box is ticked
-and the owner confirms; then set `PUBLISH = True` in tools/build_languages.py and re-run it.
+and the owner confirms; then set `PUBLISH['uz'] = True` in tools/build_languages.py and re-run it.
 
 Fix a translation in `i18n/uz.json`, never in uz/. Strings marked ⚕ make a clinical or safety statement: they need a clinician as well as a native reader.
 
@@ -17,8 +17,9 @@ Use these only where the page already says the same thing in English. No new cla
 
 ## 404.html
 
-| ✓ | English | Uzbek |
+| ✓ | English | Uzbek (Latin) |
 |---|---|---|
+| ☐ | Page not found | Sahifa topilmadi |
 | ☐ | Skip to main content | Asosiy mazmunga o‘tish |
 | ☐ | Primary | Asosiy |
 | ☐ | Platform | Platforma |
@@ -29,6 +30,7 @@ Use these only where the page already says the same thing in English. No new cla
 | ☐ | Join the pilot waitlist | Kutish ro‘yxatiga qo‘shilish |
 | ☐ | Join waitlist | Qo‘shilish |
 | ☐ | Menu | Menyu |
+| ☐ | English | English |
 | ☐ | Error 404 | 404 xatosi |
 | ☐ | This page doesn't exist. | Bunday sahifa yo‘q. |
 | ☐ | The link may be old or mistyped. | Havola eskirgan yoki noto‘g‘ri yozilgan bo‘lishi mumkin. |
@@ -44,7 +46,7 @@ Use these only where the page already says the same thing in English. No new cla
 
 ## clinics.html
 
-| ✓ | English | Uzbek |
+| ✓ | English | Uzbek (Latin) |
 |---|---|---|
 | ☐ | For clinics | Klinikalar uchun |
 | ☐ | Coriva is being built with clinics for the pilot: your doctors, their patients and care handover in one place, with clear roles and your data kept apart from other clinics. | Coriva pilot loyiha uchun klinikalar bilan birga yaratilmoqda: shifokorlaringiz, ularning bemorlari va bemorni topshirish bir joyda, rollar aniq, ma’lumotlaringiz esa boshqa klinikalardan alohida saqlanadi. |
@@ -100,7 +102,7 @@ Use these only where the page already says the same thing in English. No new cla
 
 ## contact.html
 
-| ✓ | English | Uzbek |
+| ✓ | English | Uzbek (Latin) |
 |---|---|---|
 | ☐ | Contact the team. | Jamoa bilan bog‘laning. |
 | ☐ | For partnerships, investment and other questions about Coriva. | Hamkorlik, investitsiya va Coriva haqidagi boshqa savollar uchun. |
@@ -145,7 +147,7 @@ Use these only where the page already says the same thing in English. No new cla
 
 ## doctors.html
 
-| ✓ | English | Uzbek |
+| ✓ | English | Uzbek (Latin) |
 |---|---|---|
 | ☐ | For cardiologists | Kardiologlar uchun |
 | ☐ | Supervise rehabilitation beyond discharge. | Reabilitatsiyani shifoxonadan keyin ham nazorat qiling. |
@@ -189,10 +191,10 @@ Use these only where the page already says the same thing in English. No new cla
 | ☐ ⚕ | Says so when the papers don't cover a question | Maqolalarda javob bo‘lmasa, buni aytadi |
 | ☐ ⚕ | Marks every draft as a suggestion, kept apart from approved care | Har bir qoralamani taklif deb belgilaydi va tasdiqlangan rejadan alohida saqlaydi |
 | ☐ | It never | Hech qachon |
-| ☐ ⚕ | Diagnoses | Tashxis qo‘yadi |
-| ☐ ⚕ | Prescribes or changes medication | Dori yozadi yoki o‘zgartiradi |
-| ☐ | Approves a program | Dasturni tasdiqlaydi |
-| ☐ | Sends anything to a patient without you | Sizsiz bemorga biror narsa yuboradi |
+| ☐ ⚕ | Diagnoses | Tashxis qo‘ymaydi |
+| ☐ ⚕ | Prescribes or changes medication | Dori yozmaydi va o‘zgartirmaydi |
+| ☐ | Approves a program | Dasturni tasdiqlamaydi |
+| ☐ | Sends anything to a patient without you | Sizsiz bemorga hech narsa yubormaydi |
 | ☐ | Workload, responsibility and data | Ish hajmi, mas’uliyat va ma’lumotlar |
 | ☐ | Your workload | Ish hajmingiz |
 | ☐ ⚕ | Coriva is being built to show only what needs you: patients who need a decision or sent a report. We won't promise time saved. That is one of the questions the pilot will answer. | Coriva faqat sizning e’tiboringiz kerak bo‘lgan narsani ko‘rsatish uchun yaratilmoqda: qaror kutayotgan yoki hisobot yuborgan bemorlar. Vaqt tejalishini va’da qilmaymiz. Bu pilot loyiha javob beradigan savollardan biri. |
@@ -218,7 +220,7 @@ Use these only where the page already says the same thing in English. No new cla
 
 ## index.html
 
-| ✓ | English | Uzbek |
+| ✓ | English | Uzbek (Latin) |
 |---|---|---|
 | ☐ | Cardiac rehabilitation, continued at home. | Yurak reabilitatsiyasi uyda davom etadi. |
 | ☐ ⚕ | A clinically supervised platform for cardiologists, clinics and their patients. The doctor approves every plan. AI helps prepare it and fit it to each patient. | Kardiologlar, klinikalar va ularning bemorlari uchun klinik nazorat ostidagi platforma. Har bir rejani shifokor tasdiqlaydi. Sun’iy intellekt uni tayyorlashga va har bir bemorga moslashga yordam beradi. |
@@ -329,7 +331,7 @@ Use these only where the page already says the same thing in English. No new cla
 
 ## medical-disclaimer.html
 
-| ✓ | English | Uzbek |
+| ✓ | English | Uzbek (Latin) |
 |---|---|---|
 | ☐ | Draft, pending legal review. | Qoralama, yuridik ko‘rikdan o‘tmagan. |
 | ☐ | Legal pages | Huquqiy sahifalar |
@@ -338,7 +340,7 @@ Use these only where the page already says the same thing in English. No new cla
 
 ## partners.html
 
-| ✓ | English | Uzbek |
+| ✓ | English | Uzbek (Latin) |
 |---|---|---|
 | ☐ ⚕ | Coriva is a clinically supervised cardiac rehabilitation platform where doctors retain clinical authority and AI supports decision-making, monitoring, and personalization. | Coriva — klinik nazorat ostidagi yurak reabilitatsiyasi platformasi: klinik vakolat shifokorlarda qoladi, sun’iy intellekt esa qaror qabul qilish, kuzatuv va moslashtirishda yordam beradi. |
 | ☐ | One system for cardiac rehabilitation. | Yurak reabilitatsiyasi uchun yagona tizim. |
@@ -393,7 +395,7 @@ Use these only where the page already says the same thing in English. No new cla
 
 ## patients.html
 
-| ✓ | English | Uzbek |
+| ✓ | English | Uzbek (Latin) |
 |---|---|---|
 | ☐ | For patients and families | Bemorlar va ularning yaqinlari uchun |
 | ☐ | Your doctor's plan, at home. | Shifokoringiz rejasi — uyingizda. |
@@ -440,7 +442,7 @@ Use these only where the page already says the same thing in English. No new cla
 
 ## platform.html
 
-| ✓ | English | Uzbek |
+| ✓ | English | Uzbek (Latin) |
 |---|---|---|
 | ☐ | How Coriva works. | Coriva qanday ishlaydi. |
 | ☐ ⚕ | Follow one rehabilitation program from research to a patient's day, and see where the doctor decides. Every step shows its status today. | Bitta reabilitatsiya dasturining tadqiqotdan bemor kunigacha bo‘lgan yo‘lini kuzating va shifokor qayerda qaror qabul qilishini ko‘ring. Har bir qadamda bugungi holati ko‘rsatilgan. |
@@ -535,7 +537,7 @@ Use these only where the page already says the same thing in English. No new cla
 
 ## privacy.html
 
-| ✓ | English | Uzbek |
+| ✓ | English | Uzbek (Latin) |
 |---|---|---|
 | ☐ | This page is not in force. The text will be written and reviewed by a lawyer before the website is published. | Bu sahifa hali kuchga kirmagan. Matn veb-sayt e’lon qilinishidan oldin yurist tomonidan yoziladi va ko‘rib chiqiladi. |
 | ☐ | Who is responsible for your information | Ma’lumotlaringiz uchun kim javobgar |
@@ -547,7 +549,7 @@ Use these only where the page already says the same thing in English. No new cla
 
 ## waitlist.html
 
-| ✓ | English | Uzbek |
+| ✓ | English | Uzbek (Latin) |
 |---|---|---|
 | ☐ | Join the Coriva pilot waitlist. | Coriva pilot loyihasining kutish ro‘yxatiga qo‘shiling. |
 | ☐ | For cardiologists, clinics, partners and investors. | Kardiologlar, klinikalar, hamkorlar va investorlar uchun. |

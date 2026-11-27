@@ -1,8 +1,5 @@
-# English strings with no Uzbek translation (generated; 29 entries)
+# English strings with no O‘zbekcha translation (generated; 28 entries)
 # Add them to i18n/uz.json, then re-run tools/build_languages.py.
-
-## 404.html
-- [title] Page not found
 
 ## clinics.html
 - [aria-label] Concept footage: a doctor and a patient in a clinic.
