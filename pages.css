@@ -83,3 +83,112 @@ h1 .w { display: inline-block; }
   .band-white, .sheet :is(.m-card, .rules li, .legend li, .gate-note, .surfaces li, .road.big .road-col, .sat, .help li, .safety, .ct-patient, .card) { background: #FFFFFF !important; backdrop-filter: none !important; }
   .hdr.hdr-pinned { background: #192B3A; backdrop-filter: none; }
 }
+
+/* ================= Text sections, round 9 =================
+   Two devices, used where the content calls for them:
+   1. Status track (signature): built -> pilot -> later read as materials that thin out. Built is a solid
+      sheet on a solid line, pilot an outlined sheet on a double line, later a dashed outline on a dashed line.
+      Status is found from the column's own glyph (filled half / ring / dashed ring), never from its position.
+   2. Split sheet: side-by-side ideas share one glass sheet divided by hairlines, not a row of cards. */
+:root { --t9-teal: #0F766E; --t9-ink: #192B3A; --t9-navy: #0F1F2E; --t9-coral: #B84630; --t9-line: rgba(25, 43, 58, 0.12);
+  --t9-sheet: rgba(255, 255, 255, 0.74); --t9-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 28px 56px -36px rgba(15, 31, 46, 0.38);
+  --t9-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8.5l3 3L13 4.5' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --t9-no: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6' fill='none' stroke='%23000' stroke-width='1.8'/%3E%3Cpath d='M3.8 12.2l8.4-8.4' stroke='%23000' stroke-width='1.8'/%3E%3C/svg%3E"); }
+
+/* ---------- 1. Status track: "Everything, with its status" (platform) and the roadmap (partners) ---------- */
+.by-status, .road.track { gap: 20px; padding-top: 0; }
+.road.track::before { display: none; }
+:is(.by-status .col, .road.track .road-col) { position: relative; margin-top: 22px; padding: 30px 24px 12px; border-radius: 24px; }
+:is(.by-status .col, .road.track .road-col)::before { content: ""; position: absolute; top: -22px; bottom: auto; left: 0; right: -20px; width: auto; height: 4px; border-radius: 2px; box-shadow: none; }
+:is(.by-status .col, .road.track .road-col):last-child::before { right: 24px; }
+:is(.by-status .col, .road.track .road-col)::after { content: ""; position: absolute; top: -31px; left: 18px; width: 22px; height: 22px; border-radius: 50%; box-sizing: border-box; background: #FAF8F5; }
+/* built: solid */
+:is(.by-status .col, .road.track .road-col):has(.col-tag .glyph path) { background: var(--t9-sheet); box-shadow: var(--t9-shadow); -webkit-backdrop-filter: blur(18px) saturate(170%); backdrop-filter: blur(18px) saturate(170%); }
+:is(.by-status .col, .road.track .road-col):has(.col-tag .glyph path)::before { background: var(--t9-teal); }
+:is(.by-status .col, .road.track .road-col):has(.col-tag .glyph path)::after { background: linear-gradient(90deg, #FAF8F5 50%, var(--t9-teal) 50%); box-shadow: inset 0 0 0 4px var(--t9-teal); }
+/* pilot: outlined */
+:is(.by-status .col, .road.track .road-col):not(:has(.col-tag .glyph path)):not(:has(.col-tag circle[stroke-dasharray])) { background: rgba(255, 255, 255, 0.36); box-shadow: inset 0 0 0 1.5px rgba(15, 118, 110, 0.35); }
+:is(.by-status .col, .road.track .road-col):not(:has(.col-tag .glyph path)):not(:has(.col-tag circle[stroke-dasharray]))::before { height: 6px; top: -23px; background: transparent; box-shadow: inset 0 1.5px 0 var(--t9-teal), inset 0 -1.5px 0 var(--t9-teal); border-radius: 0; }
+:is(.by-status .col, .road.track .road-col):not(:has(.col-tag .glyph path)):not(:has(.col-tag circle[stroke-dasharray]))::after { box-shadow: inset 0 0 0 4px var(--t9-teal); }
+/* later: dashed */
+:is(.by-status .col, .road.track .road-col):has(.col-tag circle[stroke-dasharray]) { background: transparent; outline: 1.5px dashed rgba(15, 118, 110, 0.45); outline-offset: -1.5px; }
+:is(.by-status .col, .road.track .road-col):has(.col-tag circle[stroke-dasharray])::before { height: 0; top: -21px; border-top: 3px dashed rgba(15, 118, 110, 0.6); border-radius: 0; }
+:is(.by-status .col, .road.track .road-col):has(.col-tag circle[stroke-dasharray])::after { box-shadow: none; border: 3px dashed var(--t9-teal); }
+:is(.by-status .col, .road.track .road-col) .col-list { border-top-color: var(--t9-line); }
+:is(.by-status .col, .road.track .road-col) .col-list li { border-bottom-color: var(--t9-line); }
+:is(.by-status .col, .road.track .road-col) .col-list li:last-child { border-bottom: 0; }
+@media (max-width: 899px) {
+  :is(.by-status .col, .road.track .road-col)::before { right: 24px; }
+  :is(.by-status .col, .road.track .road-col) + :is(.col, .road-col) { margin-top: 44px; }
+}
+
+/* ---------- 1b. "How you join" (patients): the three steps as one line you travel along ---------- */
+@media (min-width: 900px) {
+  .patient ol.next.big { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 32px; position: relative; padding: 0; margin-top: 40px; }
+  .patient ol.next.big::before { content: ""; position: absolute; top: 21px; bottom: auto; left: 44px; right: calc(33.33% - 22px); width: auto; height: 3px; border-radius: 2px; background: linear-gradient(90deg, var(--t9-teal), #14B8A6 55%, #F36F56); }
+  .patient ol.next.big li { display: flex; flex-direction: column; gap: 18px; padding: 0; position: relative; }
+  .patient ol.next.big li::before, .patient ol.next.big li::after { display: none !important; }
+  .patient ol.next.big .num-s { position: relative; z-index: 1; width: 46px; height: 46px; font-size: 18px; }
+  .patient ol.next.big li:last-child .num-s { background: var(--t9-teal); color: #FFFFFF; box-shadow: none; }
+  .patient ol.next.big h3 { font-size: clamp(22px, 2vw, 26px); }
+}
+
+/* ---------- 2. Split sheet ---------- */
+:is(.does, .roles-c, .three.worries, .ovp, .tech, .split > .ticks.big) { background: var(--t9-sheet); box-shadow: var(--t9-shadow); border-radius: 28px; -webkit-backdrop-filter: blur(18px) saturate(170%); backdrop-filter: blur(18px) saturate(170%); }
+:is(.roles-c, .three.worries, .ovp) { gap: 0; padding: 8px 0; }
+:is(.roles-c, .three.worries, .ovp) > * { padding: 28px 32px; border-top: 0 !important; }
+:is(.roles-c, .three.worries, .ovp) > * + * { box-shadow: inset 1px 0 0 var(--t9-line); }
+.three.worries .col-h, .ovp .col-h, .roles-c h3 { font-size: 22px; margin-bottom: 14px; }
+.three.worries .worry { font-size: 17px; line-height: 1.6; color: var(--t9-ink); }
+@media (max-width: 899px) {
+  :is(.roles-c, .three.worries, .ovp) > * { padding: 24px; }
+  :is(.roles-c, .three.worries, .ovp) > * + * { box-shadow: inset 0 1px 0 var(--t9-line); }
+}
+
+/* Who can do what (clinics): Can / Cannot carry a mark as well as a word */
+.roles-c :is(.can, .cannot) { padding: 14px 0 0 32px; position: relative; }
+.roles-c :is(.can, .cannot)::before { content: ""; position: absolute; left: 0; top: 16px; width: 20px; height: 20px; -webkit-mask: var(--t9-check) center / contain no-repeat; mask: var(--t9-check) center / contain no-repeat; background: var(--t9-teal); }
+.roles-c .cannot::before { -webkit-mask-image: var(--t9-no); mask-image: var(--t9-no); background: var(--t9-coral); }
+
+/* What the AI does, and never does (doctors): the boundary is the design. "Never" sits on Navy, calm, not alarming */
+.does { gap: 0; overflow: hidden; margin-top: 32px; }
+.does .does-col { padding: 32px 36px 24px; }
+.does .does-col.never { background: var(--t9-navy); color: #FAF8F5; }
+.does .does-col.never .col-h { color: #FAF8F5; }
+.does .ticks { border-top: 0; }
+.does .ticks li { position: relative; padding: 14px 0 14px 36px; border-bottom: 1px solid var(--t9-line); font-size: 17px; }
+.does .ticks li:last-child { border-bottom: 0; }
+.does .ticks li::before { content: ""; position: absolute; left: 0; top: 16px; width: 20px; height: 20px; -webkit-mask: var(--t9-check) center / contain no-repeat; mask: var(--t9-check) center / contain no-repeat; background: var(--t9-teal); }
+.does .never .ticks li { border-bottom-color: rgba(250, 248, 245, 0.14); }
+.does .never .ticks li::before { -webkit-mask-image: var(--t9-no); mask-image: var(--t9-no); background: #F6A08F; width: 20px; height: 20px; }
+
+/* Technology (partners): a 2 x 2 sheet with hairline crosses */
+.tech { border-top: 0; gap: 0; padding: 8px 0; }
+.tech li { padding: 28px 32px; border-bottom: 0; }
+.tech li:nth-child(n + 3) { box-shadow: inset 0 1px 0 var(--t9-line); }
+.tech li:nth-child(2n) { box-shadow: inset 1px 0 0 var(--t9-line); }
+.tech li:nth-child(4) { box-shadow: inset 1px 0 0 var(--t9-line), inset 0 1px 0 var(--t9-line); }
+@media (max-width: 899px) { .tech li + li, .tech li:nth-child(2n), .tech li:nth-child(4) { box-shadow: inset 0 1px 0 var(--t9-line); } }
+
+/* Your information (patients) */
+.split > .ticks.big { border-top: 0; padding: 8px 32px; }
+.split > .ticks.big li { position: relative; padding: 18px 0 18px 36px; border-bottom: 1px solid var(--t9-line); }
+.split > .ticks.big li:last-child { border-bottom: 0; }
+.split > .ticks.big li::before { content: ""; position: absolute; left: 0; top: 21px; width: 20px; height: 20px; -webkit-mask: var(--t9-check) center / contain no-repeat; mask: var(--t9-check) center / contain no-repeat; background: var(--t9-teal); }
+
+/* Opaque fallback, as elsewhere on the site */
+@media (prefers-reduced-transparency: reduce) { :is(.does, .roles-c, .three.worries, .ovp, .tech, .split > .ticks.big, .by-status .col, .road.track .road-col) { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; } :is(.does, .roles-c, .three.worries, .ovp, .tech, .split > .ticks.big) { background: #FFFFFF; } }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { :is(.does, .roles-c, .three.worries, .ovp, .tech, .split > .ticks.big) { background: #FFFFFF; } }
+
+/* ---------- 3. Questions: heading on the left, answers on the right; + turns to x when open ---------- */
+@media (min-width: 1024px) {
+  section.faq { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 0 72px; align-items: start; }
+  section.faq > h2 { position: sticky; top: 110px; margin: 8px 0 0 !important; }
+}
+.faq summary { padding-right: 4px; transition: color 160ms ease; }
+.faq summary::after { content: "+"; flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px rgba(15, 118, 110, 0.4); line-height: 1; transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1), background-color 160ms ease, color 160ms ease; }
+.faq details[open] summary { color: var(--t9-teal); }
+.faq details[open] summary::after { transform: rotate(45deg); background: var(--t9-teal); color: #FFFFFF; box-shadow: none; }
+.faq summary:hover::after { box-shadow: inset 0 0 0 1.5px var(--t9-teal); }
+.faq details > p { max-width: 62ch; }
+@media (prefers-reduced-motion: reduce) { .faq summary, .faq summary::after { transition: none; } }
