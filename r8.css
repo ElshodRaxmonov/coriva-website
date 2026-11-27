@@ -105,6 +105,8 @@
 .s2-left .role-tabs, .s2-left .role-tab { box-sizing: border-box; max-width: 100%; min-width: 0; }
 /* Resize audit: below 1280 px the floating demo widgets crowd the scene's headline, so they rest */
 @media (max-width: 1279px) { .s5-widgets { display: none !important; } }
+/* Uzbek day names (Chorshanba, Payshanba) are longer than "Wed"/"Thu": a smaller size keeps them inside the card */
+:root[lang="uz"] #i3-rp-1 .moment .t { font-size: clamp(30px, 2.3vw, 32px); }
 
 /* Round 9: same Questions layout as pages.css (the home page does not load pages.css) */
 @media (min-width: 1024px) {
@@ -118,3 +120,6 @@
 .faq summary:hover::after { box-shadow: inset 0 0 0 1.5px #0F766E; }
 .faq details > p { max-width: 62ch; }
 @media (prefers-reduced-motion: reduce) { .faq summary, .faq summary::after { transition: none; } }
+/* Russian hero: «Кардиореабилитация» is 10.5 em wide, too wide for a phone at the usual 40 px minimum;
+   the size follows the screen so the word always fits (desktop is unchanged: 7.6vw wins there) */
+:root[lang="ru"] .s1-title { font-size: clamp(26px, min(7.6vw, calc((100vw - 48px) / 10.8)), 116px); }

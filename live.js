@@ -5,6 +5,7 @@
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;   // honoured as is: no override
   root.classList.toggle('rm', reduce);
 
+  const T = (x) => (window.__CORIVA_T || {})[x] || x;   // run-time strings; the Uzbek pages define the table
   const ready = (fn) => (document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', fn) : fn());
 
   ready(() => {
@@ -17,7 +18,7 @@
   function videos() {
     document.querySelectorAll('video[data-auto]').forEach((v) => {
       const btn = v.parentElement.querySelector('.vid-btn'); let userPaused = reduce;
-      const sync = () => { if (btn) { btn.setAttribute('aria-pressed', String(v.paused)); btn.setAttribute('aria-label', v.paused ? 'Play video' : 'Pause video'); } };
+      const sync = () => { if (btn) { btn.setAttribute('aria-pressed', String(v.paused)); btn.setAttribute('aria-label', T(v.paused ? 'Play video' : 'Pause video')); } };
       v.addEventListener('play', sync); v.addEventListener('pause', sync); sync();
       const rate = +v.dataset.rate || 1; v.defaultPlaybackRate = rate; v.playbackRate = rate;   // short clean clips play slowly
       if ('once' in v.dataset) v.addEventListener('ended', () => { userPaused = true; sync(); });   // holds its last frame; the button replays it
@@ -33,9 +34,9 @@
     if ((seen && !hold) || location.hash.length > 1) return;
     root.classList.add('splash-on');
     const el = document.createElement('div'); el.className = 'splash'; el.setAttribute('aria-hidden', 'true');
-    el.innerHTML = '<div class="splash-glow"></div><div class="splash-in"><img src="blob/00ef871558ec9b9f54c10a145d26dde5.png" alt="">'
+    el.innerHTML = '<div class="splash-glow"></div><div class="splash-in"><img src="/blob/00ef871558ec9b9f54c10a145d26dde5.png" alt="">'
       + '<p class="splash-name">' + 'Coriva'.split('').map((c, i) => `<span style="--i:${i}">${c}</span>`).join('') + '</p>'
-      + '<p class="splash-tag">Every heartbeat matters.</p></div>';
+      + '<p class="splash-tag">' + T('Every heartbeat matters.') + '</p></div>';
     document.body.append(el);
     let done = false;
     const end = () => { if (done) return; done = true; el.classList.add('is-out'); root.classList.remove('splash-on'); setTimeout(() => el.remove(), 1100); };

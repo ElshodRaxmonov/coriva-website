@@ -4,6 +4,9 @@
 wrangler.jsonc
 README.md
 TRANSLATIONS_REVIEW.md
+CLINICAL_REVIEW_UZ.md
+TRANSLATIONS_REVIEW_RU.md
+CLINICAL_REVIEW_RU.md
 tools
 i18n
 node_modules

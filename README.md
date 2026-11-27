@@ -5,5 +5,8 @@ Static pages for https://coriva.uz. Plain HTML, CSS and JavaScript: no framework
 - **Source of truth:** this repository. Edit the files here directly. (The pages were first generated from the design prototype; that generator is no longer used for the live site.)
 - **Hosting:** Cloudflare Worker with static assets (project `coriva`). Every push to `main` deploys to production, so work on a branch and open a pull request.
 - **Status:** preview. The waitlist and contact forms are not open yet and send nothing. The privacy notice and medical disclaimer are drafts pending legal review (`noindex`).
-- **Languages:** English. Uzbek is a client-side draft in `i18n.js`, pending review.
+- **Languages:** English at the root, Uzbek (Latin) in `uz/`. The Uzbek pages are generated: edit the English
+  page or `i18n/uz.json`, then run `python3 tools/build_languages.py` and commit the result. Never edit `uz/` by hand.
+  Untranslated strings are listed in `i18n/missing-uz.txt`. The Uzbek text is a draft (`noindex`) until the review in
+  `TRANSLATIONS_REVIEW.md` is done; then set `PUBLISH = True` in the script and re-run it.
 - Photographs are credited in each page footer. Video clips are illustrative concept footage.

@@ -21,7 +21,8 @@
     const tiles = [...day.children]; if (tiles.length < 2) return;
     const car = document.createElement('div'); car.className = 'car';
     const arrow = (d) => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${d}"/></svg>`;
-    car.innerHTML = `<button type="button" aria-label="Previous moment">${arrow('M15 5l-7 7 7 7')}</button><button type="button" aria-label="Next moment">${arrow('M9 5l7 7-7 7')}</button><span class="car-dots" aria-hidden="true">${tiles.map(() => '<i></i>').join('')}</span>`;
+    const T = (x) => (window.__CORIVA_T || {})[x] || x;
+    car.innerHTML = `<button type="button" aria-label="${T('Previous moment')}">${arrow('M15 5l-7 7 7 7')}</button><button type="button" aria-label="${T('Next moment')}">${arrow('M9 5l7 7-7 7')}</button><span class="car-dots" aria-hidden="true">${tiles.map(() => '<i></i>').join('')}</span>`;
     day.after(car);
     const [prev, next] = car.querySelectorAll('button'); const dots = [...car.querySelectorAll('i')];
     const stepW = () => tiles[1].offsetLeft - tiles[0].offsetLeft;
