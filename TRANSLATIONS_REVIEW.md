@@ -38,9 +38,9 @@ Use these only where the page already says the same thing in English. No new cla
 | ☐ | Partners and investors | Hamkorlar va investorlar |
 | ☐ | Contact | Aloqa |
 | ☐ | Legal | Huquqiy ma’lumot |
-| ☐ | Privacy notice | Maxfiylik bildirishnomasi |
+| ☐ | Privacy notice | Maxfiylik siyosati |
 | ☐ ⚕ | Medical disclaimer | Tibbiy ogohlantirish |
-| ☐ ⚕ | Coriva is not an emergency service. If you feel unwell, call your local emergency number. | Coriva tez yordam xizmati emas. O‘zingizni yomon his qilsangiz, tez yordam raqamiga qo‘ng‘iroq qiling. |
+| ☐ ⚕ | Coriva is not an emergency service. If you feel unwell, call your local emergency number. | Coriva tez yordam xizmati emas. O‘zingizni yomon his qilsangiz, tez yordam raqamiga (103) qo‘ng‘iroq qiling. |
 
 ## clinics.html
 
@@ -89,7 +89,7 @@ Use these only where the page already says the same thing in English. No new cla
 | ☐ ⚕ | Can clinic leaders see patients' records? | Klinika rahbarlari bemorlarning yozuvlarini ko‘ra oladimi? |
 | ☐ ⚕ | No. Clinic leaders manage the team and care assignments. Clinical records stay with each patient's doctor. | Yo‘q. Klinika rahbarlari jamoani va bemorlarning biriktirilishini boshqaradi. Klinik yozuvlar har bir bemorning shifokorida qoladi. |
 | ☐ | Where is our data stored? | Ma’lumotlarimiz qayerda saqlanadi? |
-| ☐ | To be confirmed before the pilot. We will state it on this page and in the privacy notice. | Pilot loyihadan oldin aniqlanadi. Buni shu sahifada va maxfiylik bildirishnomasida ko‘rsatamiz. |
+| ☐ | To be confirmed before the pilot. We will state it on this page and in the privacy notice. | Pilot loyihadan oldin aniqlanadi. Buni shu sahifada va maxfiylik siyosatida ko‘rsatamiz. |
 | ☐ ⚕ | What happens when a doctor is away? | Shifokor ishda bo‘lmasa, nima bo‘ladi? |
 | ☐ ⚕ | Care can pass to a colleague in the same clinic. The handover is recorded. | Bemorni shu klinikadagi hamkasbga topshirish mumkin. Topshirish qayd etiladi. |
 | ☐ ⚕ | How do patients join? | Bemorlar qanday qo‘shiladi? |
@@ -107,7 +107,7 @@ Use these only where the page already says the same thing in English. No new cla
 | ☐ | Write to us | Bizga yozing |
 | ☐ | Use the form, or write to | Shakldan foydalaning yoki shu manzilga yozing: |
 | ☐ ⚕ | Are you a patient? | Siz bemormisiz? |
-| ☐ ⚕ | Please talk to your doctor about your care. Do not send health information here. If you feel unwell, call your local emergency number. | Davolanishingiz haqida shifokoringiz bilan gaplashing. Bu yerga sog‘liqqa oid ma’lumot yubormang. O‘zingizni yomon his qilsangiz, tez yordam raqamiga qo‘ng‘iroq qiling. |
+| ☐ ⚕ | Please talk to your doctor about your care. Do not send health information here. If you feel unwell, call your local emergency number. | Davolanishingiz haqida shifokoringiz bilan gaplashing. Bu yerga sog‘liqqa oid ma’lumot yubormang. O‘zingizni yomon his qilsangiz, tez yordam raqamiga (103) qo‘ng‘iroq qiling. |
 | ☐ ⚕ | Pilot waitlist | Pilot loyihaning kutish ro‘yxati |
 | ☐ | The contact form opens soon. | Aloqa shakli tez orada ochiladi. |
 | ☐ | Until then, write to us: | Ungacha bizga yozing: |
@@ -137,7 +137,7 @@ Use these only where the page already says the same thing in English. No new cla
 | ☐ | (optional) | (ixtiyoriy) |
 | ☐ | Do not include health information about yourself or anyone else. Up to 1,000 characters. | O‘zingiz yoki boshqa birov haqida sog‘liqqa oid ma’lumot yozmang. 1 000 belgigacha. |
 | ☐ | I have read the | Men |
-| ☐ | privacy notice | maxfiylik bildirishnomasi |
+| ☐ | privacy notice | maxfiylik siyosati |
 | ☐ ⚕ | and agree that Coriva uses these details to contact me about my message. | bilan tanishdim hamda Coriva ushbu ma’lumotlardan xabarim bo‘yicha men bilan bog‘lanish uchun foydalanishiga roziman. |
 | ☐ | Website | Veb-sayt |
 | ☐ | Send message | Xabar yuborish |
@@ -207,11 +207,11 @@ Use these only where the page already says the same thing in English. No new cla
 | ☐ ⚕ | Which research does the AI use? | Sun’iy intellekt qaysi tadqiqotlardan foydalanadi? |
 | ☐ ⚕ | Only research papers the team has approved. Every suggestion shows its source, and the AI says so when the papers don't cover a question. | Faqat jamoa tasdiqlagan ilmiy maqolalar. Har bir taklif o‘z manbasini ko‘rsatadi, maqolalarda javob bo‘lmasa, sun’iy intellekt buni ochiq aytadi. |
 | ☐ ⚕ | What happens if a patient feels unwell? | Bemor o‘zini yomon his qilsa, nima bo‘ladi? |
-| ☐ ⚕ | Coriva is not an emergency service. Patients are told to call their local emergency number. Their reports wait for your next review. | Coriva tez yordam xizmati emas. Bemorlarga tez yordam raqamiga qo‘ng‘iroq qilish aytiladi. Ularning hisobotlari navbatdagi ko‘rib chiqishingizni kutadi. |
+| ☐ ⚕ | Coriva is not an emergency service. Patients are told to call their local emergency number. Their reports wait for your next review. | Coriva tez yordam xizmati emas. Bemorlarga tez yordam raqamiga (103) qo‘ng‘iroq qilish aytiladi. Ularning hisobotlari navbatdagi ko‘rib chiqishingizni kutadi. |
 | ☐ ⚕ | How do my patients join? | Bemorlarim qanday qo‘shiladi? |
 | ☐ ⚕ | Through you. You invite the patient; during the pilot, the app is activated at the clinic with staff present. There is no self sign-up. | Siz orqali. Bemorni siz taklif qilasiz; pilot loyiha davomida ilova klinikada, xodimlar ishtirokida faollashtiriladi. O‘zi ro‘yxatdan o‘tish yo‘q. |
 | ☐ ⚕ | What does the waitlist keep about me? | Kutish ro‘yxati men haqimda nimalarni saqlaydi? |
-| ☐ ⚕ | Your name, work email, role, organisation and country, used only to contact you about the pilot. The details are in the privacy notice. | Ismingiz, ish elektron pochtangiz, rolingiz, tashkilotingiz va mamlakatingiz — faqat pilot loyiha bo‘yicha siz bilan bog‘lanish uchun ishlatiladi. Batafsil ma’lumot maxfiylik bildirishnomasida. |
+| ☐ ⚕ | Your name, work email, role, organisation and country, used only to contact you about the pilot. The details are in the privacy notice. | Ismingiz, ish elektron pochtangiz, rolingiz, tashkilotingiz va mamlakatingiz — faqat pilot loyiha bo‘yicha siz bilan bog‘lanish uchun ishlatiladi. Batafsil ma’lumot maxfiylik siyosatida. |
 | ☐ | Help shape the pilot. | Pilot loyihani birga shakllantiring. |
 | ☐ ⚕ | Join the waitlist as a cardiologist. We'll contact you about the pilot. | Kardiolog sifatida kutish ro‘yxatiga qo‘shiling. Pilot loyiha bo‘yicha siz bilan bog‘lanamiz. |
 | ☐ | Photograph: Shixart1985 (CC BY 2.0), via Wikimedia Commons. Product screens show demo data. | Surat: Shixart1985 (CC BY 2.0), Wikimedia Commons orqali. Ekranlarda namunaviy ma’lumotlar ko‘rsatilgan. |
@@ -276,7 +276,7 @@ Use these only where the page already says the same thing in English. No new cla
 | ☐ | Lunch | Tushlik |
 | ☐ | From your nutrition tasks. | Ovqatlanish bo‘yicha vazifalaringizdan. |
 | ☐ ⚕ | Tell your doctor | Shifokoringizga xabar bering |
-| ☐ ⚕ | How the day went, in a minute. If you feel unwell, call your local emergency number. | Kun qanday o‘tgani haqida — bir daqiqada. O‘zingizni yomon his qilsangiz, tez yordam raqamiga qo‘ng‘iroq qiling. |
+| ☐ ⚕ | How the day went, in a minute. If you feel unwell, call your local emergency number. | Kun qanday o‘tgani haqida — bir daqiqada. O‘zingizni yomon his qilsangiz, tez yordam raqamiga (103) qo‘ng‘iroq qiling. |
 | ☐ | How did today go? | Bugun kun qanday o‘tdi? |
 | ☐ | Send report | Hisobot yuborish |
 | ☐ | A partner's timeline | Hamkorning yo‘l xaritasi |
@@ -306,7 +306,7 @@ Use these only where the page already says the same thing in English. No new cla
 | ☐ ⚕ | Let AI approve a plan. | Rejani sun’iy intellekt tasdiqlashiga yo‘l qo‘ymaydi. |
 | ☐ ⚕ | Pretend to be an emergency service. | O‘zini tez yordam xizmati qilib ko‘rsatmaydi. |
 | ☐ | Show a number we can't stand behind. | Kafolatlay olmaydigan raqamni ko‘rsatmaydi. |
-| ☐ ⚕ | If you feel unwell, call your local emergency number. | O‘zingizni yomon his qilsangiz, tez yordam raqamiga qo‘ng‘iroq qiling. |
+| ☐ ⚕ | If you feel unwell, call your local emergency number. | O‘zingizni yomon his qilsangiz, tez yordam raqamiga (103) qo‘ng‘iroq qiling. |
 | ☐ | Where Coriva is today | Coriva bugun qay bosqichda |
 | ☐ | Demo | Namuna |
 | ☐ ⚕ | Supervised activation, care relationships and clinic teams, the doctor's dashboard, the patient app's sign-in, data separated per clinic. | Nazorat ostida faollashtirish, shifokor–bemor aloqalari va klinika jamoalari, shifokor paneli, bemor ilovasiga kirish, klinikalar bo‘yicha ajratilgan ma’lumotlar. |
@@ -324,7 +324,7 @@ Use these only where the page already says the same thing in English. No new cla
 | ☐ ⚕ | Does AI make clinical decisions? | Klinik qarorlarni sun’iy intellekt qabul qiladimi? |
 | ☐ ⚕ | No. AI may draft suggestions from research the clinical team has approved, and shows its sources. A doctor reviews and approves every patient's plan. | Yo‘q. Sun’iy intellekt klinik jamoa tasdiqlagan tadqiqotlar asosida takliflar tayyorlashi mumkin va manbalarini ko‘rsatadi. Har bir bemorning rejasini shifokor ko‘rib chiqadi va tasdiqlaydi. |
 | ☐ ⚕ | Is Coriva an emergency service? | Coriva tez yordam xizmatimi? |
-| ☐ ⚕ | No. If you feel unwell, call your local emergency number. | Yo‘q. O‘zingizni yomon his qilsangiz, tez yordam raqamiga qo‘ng‘iroq qiling. |
+| ☐ ⚕ | No. If you feel unwell, call your local emergency number. | Yo‘q. O‘zingizni yomon his qilsangiz, tez yordam raqamiga (103) qo‘ng‘iroq qiling. |
 | ☐ | Photographs: bluesbby, Shixart1985 (CC BY 2.0), via Wikimedia Commons | Suratlar: bluesbby, Shixart1985 (CC BY 2.0), Wikimedia Commons orqali |
 
 ## medical-disclaimer.html
@@ -472,7 +472,7 @@ Use these only where the page already says the same thing in English. No new cla
 | ☐ ⚕ | The doctor's plan. Coriva never changes medication. | Shifokorning rejasi. Coriva dorilarni hech qachon o‘zgartirmaydi. |
 | ☐ ⚕ | Approved by your doctor | Shifokoringiz tasdiqlagan |
 | ☐ | A report | Hisobot |
-| ☐ ⚕ | The patient tells the doctor how the day went. If they feel unwell, they call their local emergency number. | Bemor kun qanday o‘tganini shifokorga aytadi. O‘zini yomon his qilsa, tez yordam raqamiga qo‘ng‘iroq qiladi. |
+| ☐ ⚕ | The patient tells the doctor how the day went. If they feel unwell, they call their local emergency number. | Bemor kun qanday o‘tganini shifokorga aytadi. O‘zini yomon his qilsa, tez yordam raqamiga (103) qo‘ng‘iroq qiladi. |
 | ☐ ⚕ | The patient. | Bemor. |
 | ☐ | The next review | Navbatdagi ko‘rib chiqish |
 | ☐ ⚕ | Reports wait for the doctor's next review. The doctor adjusts the program when needed. | Hisobotlar shifokorning navbatdagi ko‘rib chiqishini kutadi. Zarur bo‘lsa, shifokor dasturni o‘zgartiradi. |
@@ -516,7 +516,7 @@ Use these only where the page already says the same thing in English. No new cla
 | ☐ | Before the pilot | Pilot loyihadan oldin |
 | ☐ | An independent security review | Mustaqil xavfsizlik tekshiruvi |
 | ☐ ⚕ | AI on open models Coriva runs itself, not a third-party AI service | Sun’iy intellekt Coriva o‘zi ishlatadigan ochiq modellarda ishlaydi, uchinchi tomon xizmatida emas |
-| ☐ | Privacy notice and terms, reviewed by lawyers | Yuristlar ko‘rib chiqqan maxfiylik bildirishnomasi va shartlar |
+| ☐ | Privacy notice and terms, reviewed by lawyers | Yuristlar ko‘rib chiqqan maxfiylik siyosati va shartlar |
 | ☐ ⚕ | How the AI is being built | Sun’iy intellekt qanday yaratilmoqda |
 | ☐ ⚕ | Rehabilitation intelligence is in research for the pilot. It is built to six rules. | Reabilitatsiya uchun sun’iy intellekt pilot loyihaga qadar tadqiq qilinmoqda. U oltita qoida asosida quriladi. |
 | ☐ ⚕ | Approved research only | Faqat tasdiqlangan tadqiqotlar |
